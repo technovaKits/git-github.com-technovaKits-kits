@@ -4,12 +4,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:kits/firstPage.dart';
 import 'firstPage.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
@@ -21,45 +21,28 @@ class LoginPage extends StatefulWidget {
 }
 
 class _SignInDemoState extends State<LoginPage> {
+  bool firstLoginCheck = false;
   GoogleSignInAccount _currentUser;
   ProgressDialog progressDialog;
   String _message = '';
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   _registerToken() {
-    //_firebaseMessaging.getToken().then((token) => print(token));
-    Future<String> token = _firebaseMessaging.getToken();
+    _firebaseMessaging.getToken().then(
+        (token) => _sendToBackendToken(_googleSignIn.currentUser.email, token));
+
     /*  TODO : 
      1. abap tarafına gönderilecek -> token and _googleSignIn.mail adresi..
      2. shared_pref. kayıt edilecek.. token istemesin.
 
     */
-
-    _sendBackendToken(_googleSignIn.currentUser.email,token);
-    _setBoolFromSharedPref();
-  }
-
-  Future<int> _getBoolFromSharedPref() async {
-    final prefs = await SharedPreferences.getInstance();
-    final firstLogin = prefs.getBool('firstLogin');
-    if (firstLogin == null) {
-      //ilk kez girilmiş
-      return null;
-    } else {
-      //ilk giriş değil.
-      return 1;
-    }
-  }
-
-  Future<void> _setBoolFromSharedPref() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('firstLogin', true);
+    setLoginCheck(); //evet giriş yapıldı ilk kez , firstLoginCheck True olacak.
   }
 
   @override
   void initState() {
     super.initState();
-
+    getLoginCheck();
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
@@ -148,7 +131,6 @@ class _SignInDemoState extends State<LoginPage> {
     _googleSignIn.disconnect();
   }
 
-  void wsLoginUser(String envelope, BuildContext context) {}
 
   Future<Null> wsLoginRequest(var envelope, BuildContext context) async {
     http.Response response = await http.post(
@@ -206,8 +188,10 @@ class _SignInDemoState extends State<LoginPage> {
 
 // shift + alt + f .. code düzenlemesi
   signIn(String userName, String uname, GoogleSignInAccount account) {
-    Future<int> value = _getBoolFromSharedPref();
-    if (value == null) {
+    //ilk kez mi login oluyor ?
+    
+
+    if (firstLoginCheck == null) {
       try {
         getMessage();
       } catch (e) {}
@@ -216,14 +200,6 @@ class _SignInDemoState extends State<LoginPage> {
         _registerToken();
       } catch (e) {}
     }
-
-    Fluttertoast.showToast(
-        msg: "Giriş yapıldı..",
-        gravity: ToastGravity.TOP,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0);
 
     LoginUser loginUser = new LoginUser(userName, uname, account.photoUrl);
 
@@ -239,8 +215,54 @@ class _SignInDemoState extends State<LoginPage> {
     );
   }
 
-  _sendBackendToken(String mail, Future<String> token){
+  _sendToBackendToken(String mail, String token) {
 
+      var envelope =  """ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZkitsSaveToken>
+         <!--Optional:-->
+         <IvMail>$mail</IvMail>
+         <!--Optional:-->
+         <IvToken>$token</IvToken>
+      </urn:ZkitsSaveToken>
+   </soapenv:Body>
+</soapenv:Envelope>;""";
+     
+    wsSendToBackendToken(envelope);
+    print("$mail , $token");
+  }
+
+  Future<Null> wsSendToBackendToken(var envelope) async{
+      http.Response response = await http.post(
+        'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_save_token/100/zkits_ws_save_token/zkits_ws_save_token',
+        headers: {
+          "Content-Type": "text/xml;charset=UTF-8",
+          "SOAPAction":
+              "urn:sap-com:document:sap:soap:functions:mc-style:zkits_ws_save_token:ZkitsSaveTokenRequest",
+          "Host": "crm.technova.com.tr:8001"
+        },
+        body: envelope);
+    var _response = response.body;
+
+      await _parsingToken(_response);
+    
+    return null;
+  }
+
+  Future _parsingToken(var _response) async{
+
+      await Future.delayed(Duration(seconds: 1));
+      var _document = xml.parse(_response);
+        final result =
+        _document.findAllElements('EvSuccess').map((node) => node.text);
+   
+    if(result.first == "1"){
+      print("success");
+    }
+    else if(result.first == "0"){
+      print("fail");
+    }
   }
 
   void getMessage() {
@@ -255,6 +277,21 @@ class _SignInDemoState extends State<LoginPage> {
       print('on launch $message');
       setState(() => _message = message["notification"]["title"]);
     });
+  }
+
+  void setLoginCheck() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("firstLogin", true);
+    print("firstLogin set edildi.");
+  }
+
+  void getLoginCheck() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool status = prefs.getBool("firstLogin");
+    setState(() {
+      firstLoginCheck = status;
+    });
+    print("firstLogin get edildi.  ${firstLoginCheck} ");
   }
 }
 

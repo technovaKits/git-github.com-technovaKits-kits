@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\technova\\Desktop\\KITS_PROJECT\\git-github.com-technovaKits-kits\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sv\\values-sv.xml",
+            "outputFile": "C:\\Users\\technova\\Desktop\\flutter project\\git-github.com-technovaKits-kits\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sv\\values-sv.xml",
             "map": [
                 {
                     "source": "C:\\Users\\technova\\.gradle\\caches\\transforms-2\\files-2.1\\23ba29ff602f2685a7aa452285b8ff04\\jetified-play-services-basement-17.0.0\\res\\values-sv\\values.xml",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\technova\\.gradle\\caches\\transforms-2\\files-2.1\\df6cf23cc51da578d8b158de17d0c9cb\\core-1.0.0\\res\\values-sv\\values-sv.xml",
+                    "source": "C:\\Users\\technova\\.gradle\\caches\\transforms-2\\files-2.1\\b011d4b5d2ec7eea4ff52e346e1e6e65\\core-1.1.0\\res\\values-sv\\values-sv.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

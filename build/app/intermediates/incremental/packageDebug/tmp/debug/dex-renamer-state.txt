@@ -1,4 +1,4 @@
-#Thu Jun 25 13:04:51 EET 2020
-base.0=C\:\\Users\\technova\\Desktop\\KITS_PROJECT\\git-github.com-technovaKits-kits\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+#Thu Jun 25 22:56:48 EET 2020
+base.0=C\:\\Users\\technova\\Desktop\\flutter project\\git-github.com-technovaKits-kits\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
