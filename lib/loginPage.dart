@@ -9,6 +9,7 @@ import 'package:kits/firstPage.dart';
 import 'firstPage.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
@@ -23,18 +24,36 @@ class _SignInDemoState extends State<LoginPage> {
   GoogleSignInAccount _currentUser;
   ProgressDialog progressDialog;
   String _message = '';
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  _register() {
-    _firebaseMessaging.getToken().then((token) => print(token));
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  _registerToken() {
+    //_firebaseMessaging.getToken().then((token) => print(token));
+    Future<String> token = _firebaseMessaging.getToken();
     /*  TODO : 
      1. abap tarafına gönderilecek -> token and _googleSignIn.mail adresi..
      2. shared_pref. kayıt edilecek.. token istemesin.
 
     */
 
+    _sendBackendToken(_googleSignIn.currentUser.email,token);
+    _setBoolFromSharedPref();
+  }
 
+  Future<int> _getBoolFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final firstLogin = prefs.getBool('firstLogin');
+    if (firstLogin == null) {
+      //ilk kez girilmiş
+      return null;
+    } else {
+      //ilk giriş değil.
+      return 1;
+    }
+  }
 
+  Future<void> _setBoolFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('firstLogin', true);
   }
 
   @override
@@ -79,7 +98,7 @@ class _SignInDemoState extends State<LoginPage> {
   void loginCheck(String mailAddress, BuildContext context) {
     var envelope = """ 
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+    xmlns:urn="urn:sap-com:document:sap:rfc:functions">
    <soapenv:Header/>
    <soapenv:Body>
       <urn:ZKITS_USERMAIL>
@@ -153,7 +172,7 @@ xmlns:urn="urn:sap-com:document:sap:rfc:functions">
     await Future.delayed(Duration(seconds: 1));
     var _document = xml.parse(_response);
 
-    final mail = _document.findAllElements('EV_MAIL').map((node) => node.text);
+    //final mail = _document.findAllElements('EV_MAIL').map((node) => node.text);
     final uname =
         _document.findAllElements('EV_UNAME').map((node) => node.text);
     final userFullName =
@@ -187,18 +206,16 @@ xmlns:urn="urn:sap-com:document:sap:rfc:functions">
 
 // shift + alt + f .. code düzenlemesi
   signIn(String userName, String uname, GoogleSignInAccount account) {
-   
-   //if(shared_token == ""){
+    Future<int> value = _getBoolFromSharedPref();
+    if (value == null) {
+      try {
+        getMessage();
+      } catch (e) {}
 
-    try {
-      getMessage();
-    } catch (e) {}
-
-    try {
-      _register();
-    } catch (e) {}
-    
-    //}
+      try {
+        _registerToken();
+      } catch (e) {}
+    }
 
     Fluttertoast.showToast(
         msg: "Giriş yapıldı..",
@@ -211,7 +228,7 @@ xmlns:urn="urn:sap-com:document:sap:rfc:functions">
     LoginUser loginUser = new LoginUser(userName, uname, account.photoUrl);
 
     // buraya ilk kez mi geliyorsun ?
-    //TODO:  shared_preference ile ilk kez mi giriş boolean bir değer tutacağız.
+    //TODO:shared_preference ile ilk kez mi giriş boolean bir değer tutacağız.
 
     Navigator.pushAndRemoveUntil(
       context,
@@ -220,6 +237,10 @@ xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       ),
       ModalRoute.withName(HomePage.routeName),
     );
+  }
+
+  _sendBackendToken(String mail, Future<String> token){
+
   }
 
   void getMessage() {
