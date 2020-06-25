@@ -6,8 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:kits/firstPage.dart';
-
 import 'firstPage.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
@@ -21,6 +22,20 @@ class LoginPage extends StatefulWidget {
 class _SignInDemoState extends State<LoginPage> {
   GoogleSignInAccount _currentUser;
   ProgressDialog progressDialog;
+  String _message = '';
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  _register() {
+    _firebaseMessaging.getToken().then((token) => print(token));
+
+    /*  TODO : 
+     1. abap tarafına gönderilecek -> token and _googleSignIn.mail adresi..
+     2. shared_pref. kayıt edilecek.. token istemesin.
+
+    */
+
+
+
+  }
 
   @override
   void initState() {
@@ -34,9 +49,8 @@ class _SignInDemoState extends State<LoginPage> {
     _googleSignIn.signInSilently();
 
     //Navigator.of(context)
-      //  .pushNamed(HomePage.routeName,arguments: _currentUser);
+    //  .pushNamed(HomePage.routeName,arguments: _currentUser);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -155,25 +169,9 @@ xmlns:urn="urn:sap-com:document:sap:rfc:functions">
           textColor: Colors.white,
           fontSize: 16.0);
       _googleSignIn.disconnect();
-    }
-    else {
-      Fluttertoast.showToast(
-          msg: "Giriş yapıldı..",
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
-      LoginUser loginUser =
-          new LoginUser(userFullName.first, uname.first, _currentUser.photoUrl);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(loginUser),
-        ),
-        ModalRoute.withName(HomePage.routeName),
-      );
+    } else {
+      //giriş yapılıyor. mail ile sistemdeki mail eşleşmiş.
+      signIn(userFullName.first, uname.first, _currentUser);
     }
 
     return null;
@@ -185,6 +183,57 @@ xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       textValue = node.text;
     }).toList();
     return textValue;
+  }
+
+// shift + alt + f .. code düzenlemesi
+  signIn(String userName, String uname, GoogleSignInAccount account) {
+   
+   //if(shared_token == ""){
+
+    try {
+      getMessage();
+    } catch (e) {}
+
+    try {
+      _register();
+    } catch (e) {}
+    
+    //}
+
+    Fluttertoast.showToast(
+        msg: "Giriş yapıldı..",
+        gravity: ToastGravity.TOP,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    LoginUser loginUser = new LoginUser(userName, uname, account.photoUrl);
+
+    // buraya ilk kez mi geliyorsun ?
+    //TODO:  shared_preference ile ilk kez mi giriş boolean bir değer tutacağız.
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(loginUser),
+      ),
+      ModalRoute.withName(HomePage.routeName),
+    );
+  }
+
+  void getMessage() {
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+      print('on message $message');
+      setState(() => _message = message["notification"]["title"]);
+    }, onResume: (Map<String, dynamic> message) async {
+      print('on resume $message');
+      setState(() => _message = message["notification"]["title"]);
+    }, onLaunch: (Map<String, dynamic> message) async {
+      print('on launch $message');
+      setState(() => _message = message["notification"]["title"]);
+    });
   }
 }
 

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\technova\\kits\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
+            "outputFile": "C:\\Users\\technova\\Desktop\\KITS_PROJECT\\git-github.com-technovaKits-kits\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\technova\\.gradle\\caches\\transforms-2\\files-2.1\\a9e00666ce09523b724eae478c16c4f9\\jetified-play-services-auth-16.0.1\\res\\values-watch-v20\\values.xml",
+                    "source": "C:\\Users\\technova\\.gradle\\caches\\transforms-2\\files-2.1\\3014993be3509e51d4f0a50f5fa7b8d5\\jetified-play-services-auth-16.0.1\\res\\values-watch-v20\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11",
                         "startColumns": "0,0,0,0,0,0,0,0",
