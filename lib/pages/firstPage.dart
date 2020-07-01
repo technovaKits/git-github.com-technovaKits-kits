@@ -1,32 +1,29 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:kits/pages/list.dart';
 import 'package:kits/pages/login.dart';
+import 'package:kits/util/LoginUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:kits/util/Records.dart';
 import "package:kits/util/RecordTypes.dart";
 import 'package:kits/util/ScreenArgument.dart';
 
-
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
 class HomePage extends StatefulWidget {
   static const routeName = '/mainPage';
-
   LoginUser loginUser;
-
-
   HomePage(this.loginUser);
-
   @override
   _HomePageState createState() => new _HomePageState(loginUser);
-
-
 }
 
 class _HomePageState extends State<HomePage> {
+    GoogleSignInAccount _currentUser;
 
   LoginUser loginUser;
 
@@ -56,10 +53,41 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+
+      _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {
+        _currentUser = account;
+      });
+      print('Change Sign in: $account');
+    });
+
     super.initState();
     recordTypeList2.clear();
     recordTypeList.clear();
   }
+
+    Future<void> _handleSignOut() async {
+    _googleSignIn.disconnect();
+
+    setLoginStatus(false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          ModalRoute.withName(LoginPage.routeName));
+
+  
+  }
+
+  void setLoginStatus(bool login) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("login", login);
+    prefs.setString("userName", '');
+    prefs.setString("uname", '');
+
+       print(
+        "login set status -> $login , userName -> null, uname -> null ");
+  }
+
 
   Future<Null> refreshList() async {
     recordList.clear();
@@ -86,8 +114,6 @@ class _HomePageState extends State<HomePage> {
 
     return null;
   }
-
-
 
   Future _parsing(var _response) async {
     refreshKey.currentState.show(atTop: false);
@@ -168,7 +194,6 @@ class _HomePageState extends State<HomePage> {
     return textValue;
   }
 
-
   Future<bool> saveUserName(String uName) async{
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -183,8 +208,6 @@ class _HomePageState extends State<HomePage> {
     String uname = prefs.getString("userName");
     return uname;
   }
-
-
 
   Widget _buildCardsList() {
     return GridView.count(
@@ -353,6 +376,10 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () {},
           ),
+          new IconButton(
+            icon: new Icon(Icons.time_to_leave), 
+            onPressed: _handleSignOut
+            )
         ],
       ),
       body: RefreshIndicator(

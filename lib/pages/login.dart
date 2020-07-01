@@ -3,6 +3,7 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:kits/util/LoginUser.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
@@ -21,8 +22,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _SignInDemoState extends State<LoginPage> {
-  bool firstLoginCheck = false; // true -> daha önce giriş yapıldı. null&false -> ilk giriş
-  bool isLogin = false;
+  bool
+      firstLoginCheck; // true -> daha önce giriş yapıldı. null&false -> ilk giriş
+  bool isLogin;
 
   GoogleSignInAccount _currentUser;
   String loginUserName, loginUname;
@@ -42,79 +44,30 @@ class _SignInDemoState extends State<LoginPage> {
   void initState() {
     super.initState();
     getFirstLoginCheck();
-    getLoginCheck();
 
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
-       print('Change Sign in: $account');
+      print('Change Sign in: $account');
     });
     try {
-       _googleSignIn.signInSilently(suppressErrors:false);
+      _googleSignIn.signInSilently(suppressErrors: false);
     } catch (e) {
       print('SigninSilent error $e');
     }
-      print('Done with initState');
-
-    //Navigator.of(context)
-    //  .pushNamed(HomePage.routeName,arguments: _currentUser);
+    print('Done with initState');
   }
 
   @override
   Widget build(BuildContext context) {
-
-    progressDialog = new ProgressDialog(context);
-    // uygulama her açıldığında girdiği kısım..
-    progressDialog.style(
-        message: 'Yükleniyor...',
-        borderRadius: 10.0,
-        backgroundColor: Colors.white,
-        progressWidget: CircularProgressIndicator(),
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        progress: 0.0,
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
-
     return Scaffold(
       body: Center(child: _buildBody(context)),
     );
   }
 
-  void loginCheck(String mailAddress, BuildContext context) {
-
-    var envelope = """ 
-    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:urn="urn:sap-com:document:sap:rfc:functions">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <urn:ZKITS_USERMAIL>
-         <!--Optional:-->
-         <IV_MAIL>$mailAddress</IV_MAIL>
-      </urn:ZKITS_USERMAIL>
-   </soapenv:Body>
-</soapenv:Envelope> """;
-
-   wsLoginRequest(envelope, context);
-  }
-
   Widget _buildBody(BuildContext context) {
-
-     Future.delayed(Duration(seconds: 1));
-
-    if (isLogin == true) {
-      //direkt giriş yapacak.
-      
-      signIn(loginUserName, loginUname, _currentUser);
-      return Text("Giriş yapılıyor.");
-
-    } else if (isLogin == false || isLogin == null) {
-
-      // mail adresi boş ise
+          
       if (_currentUser == null) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -129,15 +82,29 @@ class _SignInDemoState extends State<LoginPage> {
             ),
           ],
         );
-      }
-      else if(_currentUser != null){
+      } else if (_currentUser != null) {
         //mail adresi ile sistemdeki mail eşleşiyor mu ?
-          loginCheck(_currentUser.email, context);
-           return Text("Giriş yapılıyor.");
-
+        loginCheck(_currentUser.email, context);
+        return Text("Giriş yapılıyor.");
       }
-    }
-   return Text("Giriş yapılıyor.");
+    
+    return Text("Giriş yapılıyor.");
+  }
+
+  void loginCheck(String mailAddress, BuildContext context) {
+    var envelope = """ 
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZKITS_USERMAIL>
+         <!--Optional:-->
+         <IV_MAIL>$mailAddress</IV_MAIL>
+      </urn:ZKITS_USERMAIL>
+   </soapenv:Body>
+</soapenv:Envelope> """;
+
+    wsLoginRequest(envelope, context);
   }
 
   Future<void> _handleSignIn() async {
@@ -148,12 +115,11 @@ class _SignInDemoState extends State<LoginPage> {
     }
   }
 
-  /*Future<void> _handleSignOut() async {
+  Future<void> _handleSignOut() async {
     _googleSignIn.disconnect();
-  }*/
+  }
 
   Future wsLoginRequest(var envelope, BuildContext context) async {
-  
     http.Response response = await http.post(
         'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_usermail/100/zkits_ws_usermail/zkits_ws_usermail',
         headers: {
@@ -165,13 +131,11 @@ class _SignInDemoState extends State<LoginPage> {
         body: envelope);
     var _response = response.body;
 
-   await _parsing(_response, context);
-   
+    await _parsing(_response, context);
   }
 
   Future _parsing(var _response, BuildContext context) async {
-    
-    progressDialog.show();
+    //progressDialog.show();
     await Future.delayed(Duration(seconds: 1));
     var _document = xml.parse(_response);
 
@@ -181,16 +145,13 @@ class _SignInDemoState extends State<LoginPage> {
     final userFullName =
         _document.findAllElements('EV_USER_FULLNAME').map((node) => node.text);
 
-    progressDialog.hide();
-
-
+    //progressDialog.hide();
 
     /* eğer uname.first boş ise, bir şey dönmemiştir. Giriş yapılmıyor. 
      Email disconnect edilip başa dönüyor */
 
     if (uname.first == "") {
-    
-     Fluttertoast.showToast(
+      Fluttertoast.showToast(
           msg: "Giriş başarısız!.",
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
@@ -199,12 +160,10 @@ class _SignInDemoState extends State<LoginPage> {
           fontSize: 16.0);
 
       _googleSignIn.disconnect();
-
     } else {
       //giriş yapılıyor. mail ile sistemdeki mail eşleşmiş.
       signIn(userFullName.first, uname.first, _currentUser);
     }
-
   }
 
   getValue(Iterable<xml.XmlElement> items) {
@@ -217,8 +176,8 @@ class _SignInDemoState extends State<LoginPage> {
 
 // Uygulama ana ekranına giriş yapılması
   signIn(String userName, String uname, GoogleSignInAccount account) {
-    
-    if (firstLoginCheck == null) {//firstLoginCheck - ilk giriş mi ? 
+    if (firstLoginCheck == null) {
+      //firstLoginCheck - ilk giriş mi ?
       try {
         getMessage();
       } catch (e) {}
@@ -230,8 +189,7 @@ class _SignInDemoState extends State<LoginPage> {
 
     LoginUser loginUser = new LoginUser(userName, uname, account.photoUrl);
 
-    setLoginStatus(true,loginUser); //giriş yapıldı ve sharedpref kayıt edildi.
-    
+    setLoginStatus(true, loginUser); //giriş yapıldı ve sharedpref kayıt edildi.
   }
 
   _sendToBackendToken(String mail, String token) {
@@ -310,44 +268,22 @@ class _SignInDemoState extends State<LoginPage> {
     });
     print("firstLogin get edildi.  $firstLoginCheck ");
   }
-
-  void getLoginCheck() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool status = prefs.getBool("login");
-    String userName = prefs.getString("userName");
-    String uname = prefs.getString("uname");
-    setState(() {
-      isLogin = status;
-      loginUserName = userName;
-      loginUname = uname;
-    });
-   print("login get status -> $isLogin , userName -> $loginUserName, uname -> $loginUname ");
-  }
-
+  
   void setLoginStatus(bool login, LoginUser loginUser) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool("login", true);
     prefs.setString("userName", loginUser.personName);
     prefs.setString("uname", loginUser.userName);
-    
-    if(login == true){
 
+    if (login == true) {
       Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(loginUser),
-      ),
-      ModalRoute.withName(HomePage.routeName),
-    );
-      
+        context,
+        MaterialPageRoute(builder: (context) => HomePage(loginUser)),
+        ModalRoute.withName(HomePage.routeName),
+      );
     }
 
-    print("login set status -> $login , userName -> ${loginUser.personName}, uname -> ${loginUser.userName} ");
+    print(
+        "login set status -> $login , userName -> ${loginUser.personName}, uname -> ${loginUser.userName} ");
   }
-}
-
-class LoginUser {
-  String personName, userName, userPic;
-
-  LoginUser(this.personName, this.userName, this.userPic);
 }
