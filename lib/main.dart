@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:kits/pages/firstPage.dart';
 import 'package:kits/pages/list.dart';
 import 'package:kits/pages/login.dart';
+import 'package:kits/pages/mainPage.dart';
 import 'package:kits/pages/paslaPage.dart';
 import 'package:kits/pages/splash.dart';
-import 'package:kits/util/LoginUser.dart';
+import 'package:kits/classes/LoginUser.dart';
 
 void main() {
 
@@ -19,7 +20,8 @@ void main() {
       routes: {
         SplashScreen.routeName: (context) => SplashScreen(),
         LoginPage.routeName: (context) => LoginPage(),
-        HomePage.routeName: (context) => HomePage(loginUser),
+        MyHomePage.routeName: (context) => MyHomePage(loginUser),
+        //HomePage.routeName: (context) => HomePage(loginUser),
         ListPage.routeName: (context) => ListPage(),
         DetailPage.routeName: (context) => DetailPage(),
       }));

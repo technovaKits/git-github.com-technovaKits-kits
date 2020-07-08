@@ -3,18 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:xml/xml.dart' as xml;
 import 'package:kits/pages/list.dart';
 import 'package:kits/pages/login.dart';
-import 'package:kits/util/LoginUser.dart';
+import 'package:kits/classes/LoginUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xml/xml.dart' as xml;
-import 'package:kits/util/Records.dart';
-import "package:kits/util/RecordTypes.dart";
-import 'package:kits/util/ScreenArgument.dart';
+
+import 'package:kits/classes/Records.dart';
+import "package:kits/classes/RecordTypes.dart";
+import 'package:kits/classes/ScreenArgument.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
 class HomePage extends StatefulWidget {
+  
   static const routeName = '/mainPage';
   LoginUser loginUser;
   HomePage(this.loginUser);
@@ -66,6 +68,51 @@ class _HomePageState extends State<HomePage> {
     recordTypeList.clear();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    if (recordList.isEmpty) {
+      refreshList();
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Belge"),
+        actions: [
+          new IconButton(
+            icon: new Icon(Icons.search),
+            onPressed: () {
+              print("Tıklandı");
+            },
+          ),
+          new IconButton(
+            icon: new Icon(
+              Icons.notifications_active,
+              color: Colors.white,
+            ),
+            onPressed: () {},
+          ),
+          new IconButton(
+            icon: new Icon(Icons.time_to_leave), 
+            onPressed: _handleSignOut
+            )
+        ],
+      ),
+      body: RefreshIndicator(
+        key: refreshKey,
+        child: Container(
+          margin: EdgeInsets.only(top: 16),
+          child: Stack(
+            children: <Widget>[
+              _buildCardsList(),
+            ],
+          ),
+        ),
+        onRefresh: refreshList,
+      ),
+    );
+  }
+
+
     Future<void> _handleSignOut() async {
     _googleSignIn.disconnect();
 
@@ -87,8 +134,6 @@ class _HomePageState extends State<HomePage> {
        print(
         "login set status -> $login , userName -> null, uname -> null ");
   }
-
-
   Future<Null> refreshList() async {
     recordList.clear();
     recordTypeList.clear();
@@ -353,49 +398,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (recordList.isEmpty) {
-      refreshList();
-    }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Belge"),
-        actions: [
-          new IconButton(
-            icon: new Icon(Icons.search),
-            onPressed: () {
-              print("Tıklandı");
-            },
-          ),
-          new IconButton(
-            icon: new Icon(
-              Icons.notifications_active,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          ),
-          new IconButton(
-            icon: new Icon(Icons.time_to_leave), 
-            onPressed: _handleSignOut
-            )
-        ],
-      ),
-      body: RefreshIndicator(
-        key: refreshKey,
-        child: Container(
-          margin: EdgeInsets.only(top: 16),
-          child: Stack(
-            children: <Widget>[
-              _buildCardsList(),
-            ],
-          ),
-        ),
-        onRefresh: refreshList,
-      ),
-    );
-  }
 }
 
 

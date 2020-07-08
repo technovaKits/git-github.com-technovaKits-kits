@@ -7,10 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:kits/pages/paslaPage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:xml/xml.dart' as xml;
-import 'package:kits/util/Records.dart';
-import 'package:kits/util/ScreenArgument.dart';
-import 'package:kits/util/ScreenArgumentDetail.dart';
-import 'package:kits/util/User.dart';
+import 'package:kits/classes/Records.dart';
+import 'package:kits/classes/ScreenArgument.dart';
+import 'package:kits/classes/ScreenArgumentDetail.dart';
+import 'package:kits/classes/User.dart';
 
 class ListPage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables

@@ -3,7 +3,8 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:kits/util/LoginUser.dart';
+import 'package:kits/classes/LoginUser.dart';
+import 'package:kits/pages/mainPage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
@@ -278,8 +279,8 @@ class _SignInDemoState extends State<LoginPage> {
     if (login == true) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomePage(loginUser)),
-        ModalRoute.withName(HomePage.routeName),
+        MaterialPageRoute(builder: (context) => MyHomePage(loginUser)),
+        ModalRoute.withName(MyHomePage.routeName),
       );
     }
 

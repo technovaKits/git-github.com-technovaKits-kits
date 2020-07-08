@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kits/pages/firstPage.dart';
 import 'package:kits/pages/login.dart';
 import 'dart:async';
-import 'package:kits/util/LoginUser.dart';
+import 'package:kits/classes/LoginUser.dart';
+import 'package:kits/pages/mainPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -86,8 +86,8 @@ class StartState extends State<SplashScreen> {
       LoginUser loginUser = new LoginUser(loginUserName, loginUname, '');
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage(loginUser)),
-          ModalRoute.withName(HomePage.routeName));
+          MaterialPageRoute(builder: (context) => MyHomePage(loginUser)),
+          ModalRoute.withName(MyHomePage.routeName));
     } else {
       Navigator.pushAndRemoveUntil(
           context,

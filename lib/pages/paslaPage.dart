@@ -9,8 +9,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:xml/xml.dart' as xml;
-import 'package:kits/util/ScreenArgumentDetail.dart';
-import 'package:kits/util/User.dart';
+import 'package:kits/classes/ScreenArgumentDetail.dart';
+import 'package:kits/classes/User.dart';
 
 class DetailPage extends StatefulWidget {
   static const routeName = '/paslaPage';
