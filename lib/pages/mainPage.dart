@@ -1,23 +1,32 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:async';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kits/classes/LoginUser.dart';
 import 'package:kits/classes/RecordTypes.dart';
 import 'package:kits/classes/Records.dart';
 import 'package:kits/classes/ScreenArgument.dart';
 import 'package:http/http.dart' as http;
 import 'package:kits/pages/list.dart';
+import 'package:kits/pages/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
 
 const Color backGrountGrey = Color.fromRGBO(239, 244, 249, 100);
 const Color bottomColor = Color.fromRGBO(158, 199, 216, 100);
+const String listeName = "List";
+const String gridName = "Grid";
+
 List<Records> recordList = List();
 List<RecordTypes> recordTypeList = List();
 List<RecordTypes> recordTypeList2 = List();
 var envelope;
 var map = Map();
 LoginUser loginUser;
+String _selectedTypeList = 'Grid';
 var refreshKey = GlobalKey<RefreshIndicatorState>();
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
 class MyHomePage extends StatefulWidget {
   static const routeName = '/mainPage2';
@@ -28,11 +37,29 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState(loginUser);
 }
 
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+
+  Debouncer({this.milliseconds});
+
+  run(VoidCallback action) {
+    if (null != _timer) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
+
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  List<Records> filteredRecords = List();
+  final _debouncer = Debouncer(milliseconds: 500);
   int _page = 1;
   Choice _selectedChoice = choices[0];
   LoginUser loginUser;
   _MyHomePageState(this.loginUser);
+  GoogleSignInAccount _currentUser;
   GlobalKey _bottomNavigationKey = GlobalKey();
 
   void _select(Choice choice) {
@@ -40,11 +67,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     setState(() {
       _selectedChoice = choice;
     });
+    if (_selectedChoice.id == 'exit') {
+      //çıkış yapar
+      _handleSignOut();
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
+
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {
+        _currentUser = account;
+      });
+      print('Change Sign in: $account');
+    });
 
     refreshList();
 
@@ -65,6 +103,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               },
             ),
             // overflow menu
+            IconButton(
+              icon: Icon(Icons.photo_filter),
+              onPressed: () {
+                _settingModalBottomSheet(context);
+              },
+            ),
+
             PopupMenuButton<Choice>(
               onSelected: _select,
               itemBuilder: (BuildContext context) {
@@ -98,16 +143,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             });
           },
         ),
-        body: screens(_page));
+        body: screens(_page, _selectedTypeList));
   }
 
-//* Ekranlar arasında geçiş yapılacak bölüm.
-  Widget screens(int index) {
+  //* Ekranlar arasında geçiş yapılacak bölüm.
+  Widget screens(int index, String type) {
     if (index == 0) {
       return firstPage();
-    } else if (index == 1) {
+    } else if (index == 1 && type == 'List') {
       // list page
-      return secondPage();
+      return secondPageList();
+    } else if (type == 'Grid' && index == 1) {
+      return secondPageGrid();
     } else {
       return Text("sayfa " + index.toString());
     }
@@ -117,9 +164,72 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Text("test");
   }
 
-  Widget secondPage() {
-    return RefreshIndicator(
+  Widget secondPageList() {
+    return Column(
+      children: <Widget>[
+        TextField(
+          enabled: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(15.0),
+            hintText: 'Belge tipi veya numarasını giriniz..',
+          ),
+          onChanged: (string) {
+            _debouncer.run(() {
+              setState(() {
+                filteredRecords = recordList
+                    .where((u) => (u.recordType
+                            .toLowerCase()
+                            .contains(string.toLowerCase()) ||
+                        u.recordID
+                            .toLowerCase()
+                            .contains(string.toLowerCase())))
+                    .toList();
+              });
+            });
+          },
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.all(10.0),
+            itemCount: filteredRecords.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        filteredRecords[index].recordID,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        filteredRecords[index].recordType,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 
+  Widget secondPageGrid() {
+    return RefreshIndicator(
       key: refreshKey,
       child: Container(
         color: backGrountGrey,
@@ -149,6 +259,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Future<Null> refreshList() async {
+
+    filteredRecords.clear();
     recordList.clear();
     recordTypeList.clear();
     recordTypeList2.clear();
@@ -200,6 +312,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         recordList.add(Records(uName, recordID, recordType, recordDesc,
             recordDate, recordTime, itemID, description, onayDurum, ySorumlu));
       }).toList();
+
+
+      for(var i = 0 ; i < recordList.length ; i++){
+        if(recordList[i].onayDurum == '0'){
+          filteredRecords.add(recordList[i]);
+        }
+      }
 
       map.clear();
       if (recordTypeList.isEmpty) {
@@ -274,9 +393,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
               boxShadow: [
-                BoxShadow(color: map[item.onayDurumu], blurRadius: 5)
+                BoxShadow(color: map[item.onayDurumu], blurRadius: 1.5)
               ]),
           child: _buildItemCardChild(item),
         ));
@@ -289,14 +408,27 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            AutoSizeText(
-              item.typeDesc,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            Flexible(
+              child: RichText(
+                overflow: TextOverflow.fade,
+                strutStyle: StrutStyle(fontSize: 10.0),
+                text: TextSpan(
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    text: item.getTypeDesc),
+              ),
+            ),
+            Container(
+              width: 1.0,
+              height: 1.0,
+              color: Colors.white,
             ),
             IconButton(
               onPressed: () {
                 /*Navigator.pushNamed(context, '/listPage',
-                    arguments: recordList);*/
+                                       arguments: recordList);*/
               },
               icon: Icon(
                 Icons.menu,
@@ -334,9 +466,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   String userNameSet(String uname) {
     return """<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"
-       xmlns:urn=\"urn:sap-com:document:sap:rfc:functions\"> 
-     <soapenv:Header/> <soapenv:Body> <urn:ZCRM_WS_RECORDS> 
-     <!--Optional:--> <IV_UNAME>$uname</IV_UNAME></urn:ZCRM_WS_RECORDS></soapenv:Body></soapenv:Envelope>""";
+                          xmlns:urn=\"urn:sap-com:document:sap:rfc:functions\"> 
+                        <soapenv:Header/> <soapenv:Body> <urn:ZCRM_WS_RECORDS> 
+                        <!--Optional:--> <IV_UNAME>$uname</IV_UNAME></urn:ZCRM_WS_RECORDS></soapenv:Body></soapenv:Envelope>""";
   }
 
   newPage(RecordTypes item) {
@@ -393,16 +525,71 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     Navigator.of(context)
         .pushNamed(ListPage.routeName, arguments: ScreenArguments(recordList2));
   }
+
+  Future<void> _handleSignOut() async {
+    _googleSignIn.disconnect();
+
+    setLoginStatus(false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        ModalRoute.withName(LoginPage.routeName));
+  }
+
+  void setLoginStatus(bool login) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("login", login);
+    prefs.setString("userName", '');
+    prefs.setString("uname", '');
+
+    print("login set status -> $login , userName -> null, uname -> null ");
+  }
+
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            decoration: BoxDecoration(color: Colors.transparent),
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.list),
+                    title: new Text(listeName),
+                    onTap: () {
+                      print("tabbed list view");
+                      Navigator.pop(context);
+                      setState(() {
+                        _selectedTypeList = listeName;
+                      });
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.grid_on),
+                  title: new Text(gridName),
+                  onTap: () {
+                    print("tabbed grid view");
+                    Navigator.pop(context);
+                    setState(() {
+                      _selectedTypeList = gridName;
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
 }
 
 class Choice {
-  const Choice({this.title, this.icon});
+  const Choice({this.id, this.title, this.icon});
 
+  final String id;
   final String title;
   final IconData icon;
 }
 
 const List<Choice> choices = const <Choice>[
-   const Choice(title: 'Bildirimler', icon:Icons.notifications),
-   const Choice(title: 'Çıkış yap', icon:Icons.notifications)
+  const Choice(id: 'noti', title: 'Bildirimler', icon: Icons.notifications),
+  const Choice(id: 'exit', title: 'Çıkış yap', icon: Icons.notifications)
 ];
