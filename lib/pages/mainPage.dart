@@ -28,6 +28,8 @@ String _selectedTypeList = 'Grid';
 var refreshKey = GlobalKey<RefreshIndicatorState>();
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
+bool boolLongClicked = false;
+
 class MyHomePage extends StatefulWidget {
   static const routeName = '/mainPage2';
   LoginUser loginUser;
@@ -70,13 +72,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     if (_selectedChoice.id == 'exit') {
       //çıkış yapar
       _handleSignOut();
+    } else if (_selectedChoice.id == 'type') {
+      _settingModalBottomSheet(context);
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
@@ -92,37 +94,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('CRM & Technova'),
-          actions: <Widget>[
-            // action button
-            IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                _select(choices[0]);
-              },
-            ),
-            // overflow menu
-            IconButton(
-              icon: Icon(Icons.photo_filter),
-              onPressed: () {
-                _settingModalBottomSheet(context);
-              },
-            ),
-
-            PopupMenuButton<Choice>(
-              onSelected: _select,
-              itemBuilder: (BuildContext context) {
-                return choices.skip(0).map((Choice choice) {
-                  return PopupMenuItem<Choice>(
-                    value: choice,
-                    child: Text(choice.title),
-                  );
-                }).toList();
-              },
-            ),
-          ],
-        ),
+        appBar: appBar(),
         bottomNavigationBar: CurvedNavigationBar(
           key: _bottomNavigationKey,
           index: 1,
@@ -165,67 +137,71 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget secondPageList() {
-    return Column(
-      children: <Widget>[
-        TextField(
-          enabled: true,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(15.0),
-            hintText: 'Belge tipi veya numarasını giriniz..',
-          ),
-          onChanged: (string) {
-            _debouncer.run(() {
-              setState(() {
-                filteredRecords = recordList
-                    .where((u) => (u.recordType
-                            .toLowerCase()
-                            .contains(string.toLowerCase()) ||
-                        u.recordID
-                            .toLowerCase()
-                            .contains(string.toLowerCase())))
-                    .toList();
-              });
-            });
-          },
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: EdgeInsets.all(10.0),
-            itemCount: filteredRecords.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        filteredRecords[index].recordID,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text(
-                        filteredRecords[index].recordType,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+    return RefreshIndicator(
+        key: refreshKey,
+        child: Container(
+          color: backGrountGrey,
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(10.0),
+                      itemCount: filteredRecords.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                            onTap: () => clickObject(index),
+                            onLongPress: () {
+                              print("long press");
+                              setState(() {
+                                if (filteredRecords[index].isSelected == true) {
+                                  filteredRecords[index].isSelected = false;
+                                } else {
+                                  filteredRecords[index].isSelected = true;
+                                }
+                              });
+                            },
+                            child: Card(
+                              color: filteredRecords[index].isSelected
+                                  ? Colors.grey[300]
+                                  : Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      filteredRecords[index].recordID,
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Text(
+                                      filteredRecords[index].recordType,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                      },
+                    ),
                   ),
-                ),
-              );
-            },
+                ],
+              )
+            ],
           ),
         ),
-      ],
-    );
+        onRefresh: refreshList);
   }
 
   Widget secondPageGrid() {
@@ -259,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Future<Null> refreshList() async {
-
+    print("refrest edildi.");
     filteredRecords.clear();
     recordList.clear();
     recordTypeList.clear();
@@ -313,9 +289,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             recordDate, recordTime, itemID, description, onayDurum, ySorumlu));
       }).toList();
 
-
-      for(var i = 0 ; i < recordList.length ; i++){
-        if(recordList[i].onayDurum == '0'){
+      for (var i = 0; i < recordList.length; i++) {
+        if (recordList[i].onayDurum == '0') {
           filteredRecords.add(recordList[i]);
         }
       }
@@ -399,6 +374,64 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ]),
           child: _buildItemCardChild(item),
         ));
+  }
+
+  Icon cusIcon = Icon(Icons.search);
+  Widget cusSearchBar = Text("CRM & Technova");
+
+  Widget appBar() {
+    return AppBar(
+      actions: <Widget>[
+        IconButton(
+            icon: cusIcon,
+            onPressed: () {
+              setState(() {
+                if (this.cusIcon.icon == Icons.search) {
+                  this.cusIcon = Icon(Icons.cancel);
+                  this.cusSearchBar = TextField(
+                    textInputAction: TextInputAction.go,
+                    decoration: InputDecoration(
+                       hintStyle: TextStyle(fontSize: 20.0, color: Colors.white54),
+                      contentPadding: EdgeInsets.all(3.0),
+                      hintText: 'Belge tipi veya numarasını giriniz.',
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (string) {
+                      _debouncer.run(() {
+                        setState(() {
+                          filteredRecords = recordList
+                              .where((u) => (u.recordType
+                                      .toLowerCase()
+                                      .contains(string.toLowerCase()) ||
+                                  u.recordID
+                                      .toLowerCase()
+                                      .contains(string.toLowerCase())))
+                              .toList();
+                        });
+                      });
+                    },
+                    style: TextStyle(color: Colors.white, fontSize: 20.0),
+                  );
+                } else {
+                  this.cusIcon = Icon(Icons.search);
+                  cusSearchBar = Text("CRM & Technova");
+                }
+              });
+            }),
+        PopupMenuButton<Choice>(
+          onSelected: _select,
+          itemBuilder: (BuildContext context) {
+            return choices.skip(0).map((Choice choice) {
+              return PopupMenuItem<Choice>(
+                value: choice,
+                child: Text(choice.title),
+              );
+            }).toList();
+          },
+        ),
+      ],
+      title: cusSearchBar,
+    );
   }
 
   Widget _buildItemCardChild(RecordTypes item) {
@@ -579,6 +612,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           );
         });
   }
+
+  clickObject(int index) {
+    print("clicked {$index}");
+  }
+  
 }
 
 class Choice {
@@ -590,6 +628,7 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
+  const Choice(id: 'type', title: 'Liste Tipi', icon: Icons.list),
   const Choice(id: 'noti', title: 'Bildirimler', icon: Icons.notifications),
   const Choice(id: 'exit', title: 'Çıkış yap', icon: Icons.notifications)
 ];

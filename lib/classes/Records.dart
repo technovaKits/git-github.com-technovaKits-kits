@@ -10,6 +10,8 @@ class Records {
       onayDurum,
       ysorumlu;
 
+      bool isSelected = false;
+
   Records(
       this.userName,
       this.recordID,

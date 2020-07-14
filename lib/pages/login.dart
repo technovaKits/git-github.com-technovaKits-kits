@@ -8,8 +8,6 @@ import 'package:kits/pages/mainPage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
-import 'package:kits/pages/firstPage.dart';
-import 'firstPage.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 

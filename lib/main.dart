@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kits/pages/firstPage.dart';
 import 'package:kits/pages/list.dart';
 import 'package:kits/pages/login.dart';
 import 'package:kits/pages/mainPage.dart';
