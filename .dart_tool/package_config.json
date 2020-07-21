@@ -74,12 +74,6 @@
       "languageVersion": "2.0"
     },
     {
-      "name": "curved_navigation_bar",
-      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/curved_navigation_bar-0.3.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.0"
-    },
-    {
       "name": "fancy_dialog",
       "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/fancy_dialog-1.0.3",
       "packageUri": "lib/",
@@ -392,7 +386,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-07-08T06:55:19.556717Z",
+  "generated": "2020-07-20T14:33:27.958275Z",
   "generator": "pub",
   "generatorVersion": "2.8.4"
 }

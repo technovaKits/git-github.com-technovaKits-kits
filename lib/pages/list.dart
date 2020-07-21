@@ -24,6 +24,7 @@ class _ListPage extends State<ListPage> {
   ProgressDialog pr;
 
   List<User> user = new List();
+
   User selectedUser = new User("1", "Emre");
 
   var envelope =

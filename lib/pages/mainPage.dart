@@ -1,20 +1,27 @@
 import 'dart:async';
 
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kits/classes/Choice.dart';
 import 'package:kits/classes/LoginUser.dart';
+import 'package:kits/classes/NewRecordType.dart';
 import 'package:kits/classes/RecordTypes.dart';
 import 'package:kits/classes/Records.dart';
 import 'package:kits/classes/ScreenArgument.dart';
 import 'package:http/http.dart' as http;
-import 'package:kits/pages/list.dart';
+import 'package:kits/classes/ScreenArgumentDetail.dart';
+import 'package:kits/classes/User.dart';
+//import 'package:kits/pages/list.dart';
 import 'package:kits/pages/login.dart';
+import 'package:kits/pages/paslaPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml/xml.dart' as xml;
 
-const Color backGrountGrey = Color.fromRGBO(239, 244, 249, 100);
-const Color bottomColor = Color.fromRGBO(158, 199, 216, 100);
+const Color backGrountGrey = Colors.white;
+
+///Color.fromRGBO(239, 244, 249, 100);
+const Color bottomColor =
+    Color.fromRGBO(239, 244, 249, 100); //Color.fromRGBO(158, 199, 216, 100);
 const String listeName = "List";
 const String gridName = "Grid";
 
@@ -31,6 +38,7 @@ GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 bool boolLongClicked = false;
 
 class MyHomePage extends StatefulWidget {
+  final controller = ScrollController();
   static const routeName = '/mainPage2';
   LoginUser loginUser;
 
@@ -55,8 +63,15 @@ class Debouncer {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  List<User> user = new List();
   List<Records> filteredRecords = List();
-  final _debouncer = Debouncer(milliseconds: 500);
+  List<NewRecordType> newRecordList = List();
+  List<NewRecordType> newRecordList2 = List();
+
+  List<NewRecordType> newPaslaOnayList = List();
+  List<NewRecordType> newPaslaOnayLis2 = List();
+
+  final _debouncer = Debouncer(milliseconds: 200);
   int _page = 1;
   Choice _selectedChoice = choices[0];
   LoginUser loginUser;
@@ -71,9 +86,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     });
     if (_selectedChoice.id == 'exit') {
       //çıkış yapar
-      _handleSignOut();
-    } else if (_selectedChoice.id == 'type') {
-      _settingModalBottomSheet(context);
+
+      _showMyDialog();
+      //_handleSignOut();
     }
   }
 
@@ -86,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       print('Change Sign in: $account');
     });
 
+    getUsers();
     refreshList();
 
     super.initState();
@@ -95,20 +111,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBar(),
-        bottomNavigationBar: CurvedNavigationBar(
-          key: _bottomNavigationKey,
-          index: 1,
-          height: 50.0,
-          items: <Widget>[
-            Icon(Icons.dashboard, size: 25),
-            Icon(Icons.list, size: 25),
-            Icon(Icons.compare_arrows, size: 25)
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _page,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard),
+                title: Text("Dasboard"),
+                backgroundColor: Colors.blue),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                title: Text("Belgeler"),
+                backgroundColor: Colors.blue),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.store),
+                title: Text("Diğer"),
+                backgroundColor: Colors.blue),
           ],
-          color: Colors.white,
-          buttonBackgroundColor: Colors.white,
-          backgroundColor: backGrountGrey,
-          animationCurve: Curves.easeInOutCubic,
-          animationDuration: Duration(milliseconds: 100),
           onTap: (index) {
             setState(() {
               _page = index;
@@ -122,14 +141,99 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget screens(int index, String type) {
     if (index == 0) {
       return firstPage();
-    } else if (index == 1 && type == 'List') {
+    } else if (index == 1) {
       // list page
       return secondPageList();
-    } else if (type == 'Grid' && index == 1) {
-      return secondPageGrid();
     } else {
-      return Text("sayfa " + index.toString());
+      // bu paslama veya paslanan belgeleri gösterir.
+      return paslamaPage();
+      // return Text("sayfa " + index.toString());
     }
+  }
+
+  Widget paslamaPage() {
+    return RefreshIndicator(
+        key: refreshKey,
+        child: Container(
+          color: backGrountGrey,
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: newPaslaOnayLis2.length,
+                      itemBuilder: (context, i) {
+                        return new ExpansionTile(
+                          title: new Text(
+                            newPaslaOnayLis2[i].recordId,
+                            style: new TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          children: <Widget>[
+                            new Column(
+                              children: _buildExpandableContentPasla(
+                                  newPaslaOnayLis2[i]),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        onRefresh: refreshList);
+  }
+
+  Future<Null> getUsers() async {
+    var envelope2 =
+        "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" "
+        "xmlns:urn=\"urn:sap-com:document:sap:rfc:functions\"><soapenv:Header/><soapenv:Body>"
+        "<urn:ZKITS_USER/></soapenv:Body></soapenv:Envelope>";
+
+    http.Response response = await http.post(
+        'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_user/100/zkits_user/zuser_kits',
+        headers: {
+          "Content-Type": "text/xml; charset=utf-8",
+          "SOAPAction":
+              "urn:sap-com:document:sap:rfc:functions:zkits_user:ZKITS_USERRequest",
+          "Host": "crm.technova.com.tr:8001",
+        },
+        body: envelope2);
+    var _response = response.body;
+    List<User> user2 = new List();
+    user2 = await _parsing2(_response);
+
+    setState(() {
+      this.user = user2;
+    });
+
+    return null;
+  }
+
+  Future _parsing2(var _response) async {
+    //pr.show();
+    await Future.delayed(Duration(seconds: 1));
+    var _document = xml.parse(_response);
+
+    Iterable<xml.XmlElement> items = _document.findAllElements('item');
+
+    if (items.length > 0) {
+      items.map((xml.XmlElement item) {
+        var userID = getValue(item.findElements("UNAME"));
+        var userName = getValue(item.findElements("USER_FULLNAME"));
+
+        user.add(User(userID, userName));
+      }).toList();
+    }
+
+    // pr.hide();
+    return user;
   }
 
   Widget firstPage() {
@@ -147,52 +251,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      padding: EdgeInsets.all(10.0),
-                      itemCount: filteredRecords.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                            onTap: () => clickObject(index),
-                            onLongPress: () {
-                              print("long press");
-                              setState(() {
-                                if (filteredRecords[index].isSelected == true) {
-                                  filteredRecords[index].isSelected = false;
-                                } else {
-                                  filteredRecords[index].isSelected = true;
-                                }
-                              });
-                            },
-                            child: Card(
-                              color: filteredRecords[index].isSelected
-                                  ? Colors.grey[300]
-                                  : Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      filteredRecords[index].recordID,
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      filteredRecords[index].recordType,
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
+                      itemCount: newRecordList2.length,
+                      itemBuilder: (context, i) {
+                        return new ExpansionTile(
+                          title: new Text(
+                            newRecordList2[i].recordId +
+                                " - " +
+                                newRecordList2[i].type,
+                            style: new TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          children: <Widget>[
+                            new Column(
+                              children:
+                                  _buildExpandableContent(newRecordList2[i]),
+                            ),
+                          ],
+                        );
                       },
                     ),
                   ),
@@ -204,34 +281,54 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         onRefresh: refreshList);
   }
 
-  Widget secondPageGrid() {
-    return RefreshIndicator(
-      key: refreshKey,
-      child: Container(
-        color: backGrountGrey,
-        padding: EdgeInsets.only(top: 16),
-        child: Stack(
-          children: <Widget>[
-            _buildCardsList(),
-          ],
-        ),
-      ),
-      onRefresh: refreshList,
-    );
+  _buildExpandableContent(NewRecordType newRecordType) {
+    List<Widget> columnContent = [];
+
+    for (Records record in newRecordType.records)
+      columnContent.add(ListTile(
+          dense: true,
+          isThreeLine: false,
+          enabled: true,
+          onTap: () => _recordLongClick(context, record),
+          // onLongPress: () => _recordLongClick(context),
+          subtitle: new Text(record.itemID),
+          leading: new Text(record.recordID),
+          selected: true,
+          trailing: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(record.recordDate),
+              Text(record.recordTime)
+            ],
+          ),
+          title: new Text(record.recordDecs)));
+
+    return columnContent;
   }
 
-  Widget _buildCardsList() {
-    return GridView.count(
-      // Create a grid with 2 columns. If you change the scrollDirection to
-      // horizontal, this produces 2 rows.
-      crossAxisCount: 2,
-      // Generate 100 widgets that display their index in the List.
-      children: List.generate(recordTypeList2.length, (index) {
-        var item = recordTypeList2.elementAt(index);
+  _buildExpandableContentPasla(NewRecordType newRecordType) {
+    List<Widget> columnContent = [];
 
-        return _buildItemCard(item);
-      }),
-    );
+    for (Records record in newRecordType.records)
+      columnContent.add(ListTile(
+          dense: true,
+          isThreeLine: false,
+          enabled: true,
+          onTap: () => _recordLongPasla(context, record, newRecordType.type),
+          // onLongPress: () => _recordLongClick(context),
+          subtitle: new Text(record.itemID),
+          leading: new Text(record.recordID),
+          selected: true,
+          trailing: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(record.recordDate),
+              Text(record.recordTime)
+            ],
+          ),
+          title: new Text(record.recordDecs)));
+
+    return columnContent;
   }
 
   Future<Null> refreshList() async {
@@ -240,10 +337,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     recordList.clear();
     recordTypeList.clear();
     recordTypeList2.clear();
+    newRecordList.clear();
 
     // refreshKey.currentState?.show(atTop: false);
 
-    envelope = userNameSet("eaydin");
+    envelope = userNameSet(loginUser.userName);
 
     try {
       http.Response response = await http.post(
@@ -255,11 +353,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             "Host": "crm.technova.com.tr:8001"
           },
           body: envelope);
-      var _response = response.body;
 
-      await _parsing(_response);
+      if (response.statusCode == 200) {
+        var _response = response.body;
+
+        await _parsing(_response);
+      }
     } catch (exception) {
-      print(exception);
+      print("hataaaaaaaaaaa " + exception);
     }
 
     setState(() {});
@@ -289,58 +390,54 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             recordDate, recordTime, itemID, description, onayDurum, ySorumlu));
       }).toList();
 
+      NewRecordType tmpPasla = new NewRecordType();
+      NewRecordType tmpOnay = new NewRecordType();
+      List<NewRecordType> tmpList2 = List();
       for (var i = 0; i < recordList.length; i++) {
         if (recordList[i].onayDurum == '0') {
           filteredRecords.add(recordList[i]);
+        } else if (recordList[i].onayDurum == '1') {
+          tmpOnay.recordId = 'Size paslanmak istenen belgeler';
+          tmpOnay.records.add(recordList[i]);
+          tmpOnay.type = 'ONAY';
+          //tmpOnay.type = recordList[i].recordType;
+        } else if (recordList[i].onayDurum == '2') {
+          tmpPasla.recordId = 'Onaylanmak üzere paslanan belgeler';
+          tmpPasla.records.add(recordList[i]);
         }
       }
+      tmpOnay.type = 'ONAY';
+      tmpPasla.type = 'PASLA';
+      tmpList2.add(tmpOnay);
+      tmpList2.add(tmpPasla);
 
-      map.clear();
-      if (recordTypeList.isEmpty) {
-        recordList.forEach((element) {
-          if (element.onayDurum == "1") {
-            if (!map.containsKey("Onay Beklenen|Onay"))
-              map["Onay Beklenen|Onay"] = 1;
-            else {
-              map["Onay Beklenen|Onay"] += 1;
+      newPaslaOnayList = tmpList2;
+      newPaslaOnayLis2 = newPaslaOnayList;
+
+      NewRecordType tmpList = new NewRecordType();
+      List<NewRecordType> liste = List();
+
+      for (var i = 0; i < filteredRecords.length; i++) {
+        tmpList = new NewRecordType();
+        if (filteredRecords[i].itemID == '0000000000') {
+          tmpList.recordId = filteredRecords[i].recordID;
+          tmpList.records.add(filteredRecords[i]);
+          tmpList.type = filteredRecords[i].recordType;
+
+          for (var j = 0; j < filteredRecords.length; j++) {
+            if (filteredRecords[i].recordID == filteredRecords[j].recordID &&
+                filteredRecords[i].itemID != filteredRecords[j].itemID) {
+              tmpList.records.add(filteredRecords[j]);
             }
-          } else if (element.onayDurum == "2") {
-            if (!map.containsKey("Paslanma Istegi|Paslama"))
-              map["Paslanma Istegi|Paslama"] = 1;
-            else {
-              map["Paslanma Istegi|Paslama"] += 1;
-            }
-          } else if (!map
-              .containsKey(element.recordType + "|" + element.recordDecs)) {
-            map[element.recordType + "|" + element.recordDecs] = 1;
-          } else if (map
-              .containsKey(element.recordType + "|" + element.recordDecs)) {
-            map[element.recordType + "|" + element.recordDecs] += 1;
           }
-        });
-
-        map.forEach((k, v) => recordTypeList.add(RecordTypes(k, k, v)));
-
-        recordTypeList.sort((a, b) => a.count.compareTo(b.count));
-        recordTypeList2.clear();
-
-        for (int i = recordTypeList.length; i > 0; i--) {
-          String onayDurumu = "0";
-
-          if (recordTypeList[i - 1].typeDesc.contains("Onay")) {
-            onayDurumu = "1";
-          } else if (recordTypeList[i - 1].typeDesc.contains("Paslama")) {
-            onayDurumu = "2";
-          }
-
-          recordTypeList2.add(RecordTypes.overloadedContructor(
-              recordTypeList[i - 1].typeName,
-              recordTypeList[i - 1].typeDesc,
-              onayDurumu,
-              recordTypeList[i - 1].count));
+          liste.add(tmpList);
+          tmpList = null;
         }
       }
+      newRecordList = liste;
+      newRecordList2 = newRecordList;
     }
+
     return null;
   }
 
@@ -350,30 +447,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       textValue = node.text;
     }).toList();
     return textValue;
-  }
-
-  Widget _buildItemCard(RecordTypes item) {
-    Map map = {
-      '0': Colors.blue, //normal
-      '1': Colors.red, //paslanma onayı beklenen
-      '2': Colors.amber, //paslanan
-    };
-
-    return GestureDetector(
-        onTap: () => newPage(item),
-        child: Container(
-          width: 100,
-          height: 100,
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              boxShadow: [
-                BoxShadow(color: map[item.onayDurumu], blurRadius: 1.5)
-              ]),
-          child: _buildItemCardChild(item),
-        ));
   }
 
   Icon cusIcon = Icon(Icons.search);
@@ -391,19 +464,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   this.cusSearchBar = TextField(
                     textInputAction: TextInputAction.go,
                     decoration: InputDecoration(
-                       hintStyle: TextStyle(fontSize: 20.0, color: Colors.white54),
+                      hintStyle:
+                          TextStyle(fontSize: 20.0, color: Colors.white54),
                       contentPadding: EdgeInsets.all(3.0),
                       hintText: 'Belge tipi veya numarasını giriniz.',
                       border: InputBorder.none,
                     ),
+                    autofocus: true,
                     onChanged: (string) {
                       _debouncer.run(() {
                         setState(() {
-                          filteredRecords = recordList
-                              .where((u) => (u.recordType
+                          newRecordList2 = newRecordList
+                              .where((u) => (u.recordId
                                       .toLowerCase()
                                       .contains(string.toLowerCase()) ||
-                                  u.recordID
+                                  u.type
                                       .toLowerCase()
                                       .contains(string.toLowerCase())))
                               .toList();
@@ -504,61 +579,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         <!--Optional:--> <IV_UNAME>$uname</IV_UNAME></urn:ZCRM_WS_RECORDS></soapenv:Body></soapenv:Envelope>""";
   }
 
-  newPage(RecordTypes item) {
-    var boolean = true;
-    List<Records> recordList2 = new List();
-    var p = 0;
-
-    if (item.typeDesc == "Onay") {
-      p = 1;
-    } else if (item.typeDesc == "Paslama") {
-      p = 2;
-    }
-
-    if (p == 1 || p == 2) {
-      recordList.forEach((f) {
-        if ((f.onayDurum == p.toString())) {
-          for (int i = 0; i < recordList2.length; i++) {
-            if (recordList2[i].recordID == f.recordID &&
-                recordList2[i].itemID == f.itemID) {
-              boolean = false;
-            }
-          }
-
-          if (boolean == true) {
-            recordList2.add(f);
-          } else {
-            boolean = true;
-          }
-        }
-      });
-    } else {
-      recordList.forEach((f) {
-        if (f.recordType.contains(item.typeName.toString())) {
-          if (f.onayDurum.toString() != "1" && f.onayDurum.toString() != "2") {
-            for (int i = 0; i < recordList2.length; i++) {
-              if (recordList2[i].recordID == f.recordID &&
-                  recordList2[i].itemID == f.itemID) {
-                boolean = false;
-              }
-            }
-
-            if (boolean == true) {
-              recordList2.add(f);
-            } else {
-              boolean = true;
-            }
-          }
-        }
-      });
-    }
-
-    //final newList = [];
-
-    Navigator.of(context)
-        .pushNamed(ListPage.routeName, arguments: ScreenArguments(recordList2));
-  }
-
   Future<void> _handleSignOut() async {
     _googleSignIn.disconnect();
 
@@ -578,57 +598,282 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     print("login set status -> $login , userName -> null, uname -> null ");
   }
 
-  void _settingModalBottomSheet(context) {
+  void _recordLongPasla(context, Records record, String type) {
     showModalBottomSheet(
         context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        builder: (BuildContext bc) {
+          if (type == 'ONAY') {
+            return Container(
+              decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(10.0),
+                      topRight: const Radius.circular(10.0))),
+              child: new Wrap(
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      margin: new EdgeInsets.all(10.0),
+                      child: new Text(record.userName +
+                          ' ' +
+                          record.recordID +
+                          " numaralı belge"),
+                    ),
+                  ),
+                  new ListTile(
+                      leading: new Icon(
+                        Icons.add,
+                        color: Colors.green,
+                      ),
+                      title: new Text("Onayla"),
+                      onTap: () {
+                        print("tabbed detail");
+
+                        paslaOnayRed(record,2,'');
+                        Navigator.pop(context);
+                        setState(() {});
+                      }),
+                  new ListTile(
+                      leading: new Icon(
+                        Icons.cancel,
+                        color: Colors.redAccent,
+                      ),
+                      title: new Text("Reddet"),
+                      onTap: () {
+                        print("tabbed detail");
+                        paslaOnayRed(record,2,'');
+                        Navigator.pop(context);
+                        setState(() {});
+                      }),
+                ],
+              ),
+            );
+          } else {
+            return Container(
+              decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(10.0),
+                      topRight: const Radius.circular(10.0))),
+              child: new Wrap(
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      margin: new EdgeInsets.all(10.0),
+                      child: new Text(record.ysorumlu +
+                          ' ' +
+                          record.recordID +
+                          " numaralı belge"),
+                    ),
+                  ),
+                  new ListTile(
+                      leading: new Icon(
+                        Icons.backspace,
+                        color: Colors.lightBlue,
+                      ),
+                      title: new Text("Geri Çek"),
+                      onTap: () {
+                        print("tabbed detail");
+                        Navigator.pop(context);
+                        setState(() {});
+                      }),
+                ],
+              ),
+            );
+          }
+        });
+  }
+
+  void _recordLongClick(context, Records record) {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         builder: (BuildContext bc) {
           return Container(
-            decoration: BoxDecoration(color: Colors.transparent),
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0))),
             child: new Wrap(
               children: <Widget>[
+                Center(
+                  child: Container(
+                    margin: new EdgeInsets.all(10.0),
+                    child: new Text(record.recordID + " numaralı belge"),
+                  ),
+                ),
                 new ListTile(
-                    leading: new Icon(Icons.list),
-                    title: new Text(listeName),
+                    leading: new Icon(
+                      Icons.details,
+                      color: Colors.blue,
+                    ),
+                    title: new Text("Detay Göster"),
                     onTap: () {
-                      print("tabbed list view");
+                      print("tabbed detail");
                       Navigator.pop(context);
-                      setState(() {
-                        _selectedTypeList = listeName;
-                      });
+                      setState(() {});
                     }),
                 new ListTile(
-                  leading: new Icon(Icons.grid_on),
-                  title: new Text(gridName),
+                  leading: new Icon(
+                    Icons.send,
+                    color: Colors.cyan,
+                  ),
+                  title: new Text("Paslama"),
                   onTap: () {
-                    print("tabbed grid view");
+                    ScreenArgumentsDetail detail = ScreenArgumentsDetail(
+                        record.recordID,
+                        record.itemID,
+                        record.recordType,
+                        record.userName,
+                        record.recordDate,
+                        record.recordTime,
+                        user,
+                        record.description);
+                    print("tabbed pasla");
                     Navigator.pop(context);
-                    setState(() {
-                      _selectedTypeList = gridName;
-                    });
+                    Navigator.of(context)
+                        .pushNamed(DetailPage.routeName, arguments: detail);
+                    setState(() {});
                   },
                 ),
+                new ListTile(
+                    leading: new Icon(
+                      Icons.do_not_disturb,
+                      color: Colors.lime,
+                    ),
+                    title: new Text("İgnore et"),
+                    onTap: () {
+                      print("tabbed detail");
+                      Navigator.pop(context);
+                      setState(() {});
+                    }),
               ],
             ),
           );
         });
   }
 
-  clickObject(int index) {
+  clickObject(String index) {
     print("clicked {$index}");
   }
-  
-}
 
-class Choice {
-  const Choice({this.id, this.title, this.icon});
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Çıkış yapılıyor'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Uygulamadan çıkış yapmak istiyor musunuz?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Hayır'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Çıkış yap'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _handleSignOut();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  final String id;
-  final String title;
-  final IconData icon;
+
+  paslaOnayRed(Records record, int index, String durum) {
+    wsPaslaSonuc(
+        record.userName,
+       record.itemID,
+       record.recordID,
+        record.recordType,
+        durum);
+  }
+
+    void wsPaslaSonuc(String eSorumlu, String item, String objectID,
+      String recordType, String result) {
+    var wsOnay = """ 
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZKITS_ROUTE>
+         <!--Optional:-->
+         <IV_ESORUMLU>$eSorumlu</IV_ESORUMLU>
+         <!--Optional:-->
+         <IV_KALEMID>$item</IV_KALEMID>
+         <!--Optional:-->
+         <IV_OBJECTID>$objectID</IV_OBJECTID>
+         <!--Optional:-->
+         <IV_RECORDTYPE>$recordType</IV_RECORDTYPE>
+         <!--Optional:-->
+         <IV_RESULT>$result</IV_RESULT>
+      </urn:ZKITS_ROUTE>
+   </soapenv:Body>
+</soapenv:Envelope>""";
+
+    wsPaslaRequest(wsOnay, context);
+  }
+
+   Future<Null> wsPaslaRequest(var envelope, BuildContext context) async {
+    http.Response response = await http.post(
+        'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_route/100/zkits_ws_route/zkits_ws_route',
+        headers: {
+          "Content-Type": "text/xml;charset=UTF-8",
+          "SOAPAction":
+              "urn:sap-com:document:sap:rfc:functions:zkits_ws_route:ZKITS_ROUTERequest",
+          "Host": "crm.technova.com.tr:8001"
+        },
+        body: envelope);
+    var _response = response.body;
+
+    await _parsingOnay(_response, context);
+
+    setState(() {});
+
+    return null;
+  }
+
+    Future _parsingOnay(var _response, BuildContext context) async {
+
+    await Future.delayed(Duration(seconds: 1));
+    var _document = xml.parse(_response);
+
+    final sonuc =
+        _document.findAllElements('EV_SONUC').map((node) => node.text);
+    final sonucDesc =
+        _document.findAllElements('EV_SONUC_DESC').map((node) => node.text);
+
+    if (sonuc.contains("X")) {
+      print("ok -> "+ sonucDesc.toString());
+    } else {
+     print("fail -> " + sonucDesc.toString());
+    }
+
+    return null;
+  }
+
+
+
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(id: 'type', title: 'Liste Tipi', icon: Icons.list),
   const Choice(id: 'noti', title: 'Bildirimler', icon: Icons.notifications),
   const Choice(id: 'exit', title: 'Çıkış yap', icon: Icons.notifications)
 ];
