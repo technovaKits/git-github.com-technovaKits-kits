@@ -166,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       itemBuilder: (context, i) {
                         return new ExpansionTile(
                           title: new Text(
-                            newPaslaOnayLis2[i].recordId,
+                            newPaslaOnayLis2[i].recordId +
+                             " - (" + newPaslaOnayLis2[i].records.length.toString() + ")",
                             style: new TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -397,7 +398,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         if (recordList[i].onayDurum == '0') {
           filteredRecords.add(recordList[i]);
         } else if (recordList[i].onayDurum == '1') {
-          tmpOnay.recordId = 'Size paslanmak istenen belgeler';
+          tmpOnay.recordId = 'Size paslanmak istenen belgeler' ;
           tmpOnay.records.add(recordList[i]);
           tmpOnay.type = 'ONAY';
           //tmpOnay.type = recordList[i].recordType;
