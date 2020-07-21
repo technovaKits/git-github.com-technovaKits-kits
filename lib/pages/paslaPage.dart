@@ -170,6 +170,7 @@ class _HomePageState extends State<DetailPage> {
           fontSize: 16.0);
 
           Navigator.pop(context);
+          
     
     } else {
       Fluttertoast.showToast(
@@ -179,7 +180,7 @@ class _HomePageState extends State<DetailPage> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-          
+
     }
 
     return null;
