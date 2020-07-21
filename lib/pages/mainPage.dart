@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kits/classes/Choice.dart';
 import 'package:kits/classes/LoginUser.dart';
@@ -64,9 +66,13 @@ class Debouncer {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   List<User> user = new List();
+List<User> user2 = new List();
+
   List<Records> filteredRecords = List();
   List<NewRecordType> newRecordList = List();
   List<NewRecordType> newRecordList2 = List();
+
+  bool isDataRequested = false;
 
   List<NewRecordType> newPaslaOnayList = List();
   List<NewRecordType> newPaslaOnayLis2 = List();
@@ -153,42 +159,45 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Widget paslamaPage() {
     return RefreshIndicator(
-        key: refreshKey,
-        child: Container(
-          color: backGrountGrey,
-          child: Stack(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: newPaslaOnayLis2.length,
-                      itemBuilder: (context, i) {
-                        return new ExpansionTile(
-                          title: new Text(
-                            newPaslaOnayLis2[i].recordId +
-                             " - (" + newPaslaOnayLis2[i].records.length.toString() + ")",
-                            style: new TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+      key: refreshKey,
+      child: Container(
+        color: backGrountGrey,
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: newPaslaOnayLis2.length,
+                    itemBuilder: (context, i) {
+                      return new ExpansionTile(
+                        title: new Text(
+                          newPaslaOnayLis2[i].recordId +
+                              " - (" +
+                              newPaslaOnayLis2[i].records.length.toString() +
+                              ")",
+                          style: new TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                          children: <Widget>[
-                            new Column(
-                              children: _buildExpandableContentPasla(
-                                  newPaslaOnayLis2[i]),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+                        ),
+                        children: <Widget>[
+                          new Column(
+                            children: _buildExpandableContentPasla(
+                                newPaslaOnayLis2[i]),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
-        onRefresh: refreshList);
+      ),
+      onRefresh: refreshList,
+    );
   }
 
   Future<Null> getUsers() async {
@@ -334,11 +343,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Future<Null> refreshList() async {
     print("refrest edildi.");
-    filteredRecords.clear();
-    recordList.clear();
-    recordTypeList.clear();
-    recordTypeList2.clear();
-    newRecordList.clear();
 
     // refreshKey.currentState?.show(atTop: false);
 
@@ -374,6 +378,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     await Future.delayed(Duration(seconds: 2));
     var _document = xml.parse(_response);
 
+//clears
+    recordList.clear();
+    filteredRecords.clear();
+    recordList.clear();
+    recordTypeList.clear();
+    recordTypeList2.clear();
+    newRecordList.clear();
+//clears
+
     Iterable<xml.XmlElement> items = _document.findAllElements('item');
     if (items.length > 0) {
       items.map((xml.XmlElement item) {
@@ -398,7 +411,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         if (recordList[i].onayDurum == '0') {
           filteredRecords.add(recordList[i]);
         } else if (recordList[i].onayDurum == '1') {
-          tmpOnay.recordId = 'Size paslanmak istenen belgeler' ;
+          tmpOnay.recordId = 'Size paslanmak istenen belgeler';
           tmpOnay.records.add(recordList[i]);
           tmpOnay.type = 'ONAY';
           //tmpOnay.type = recordList[i].recordType;
@@ -633,7 +646,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       onTap: () {
                         print("tabbed detail");
 
-                        paslaOnayRed(record,2,'');
+                        paslaOnayRed(record, "X");
                         Navigator.pop(context);
                         setState(() {});
                       }),
@@ -645,7 +658,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       title: new Text("Reddet"),
                       onTap: () {
                         print("tabbed detail");
-                        paslaOnayRed(record,2,'');
+                        paslaOnayRed(record, "");
                         Navigator.pop(context);
                         setState(() {});
                       }),
@@ -727,6 +740,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   ),
                   title: new Text("Paslama"),
                   onTap: () {
+                    
+                    for(var i = 0 ; i < user.length ; i++){
+                      if(user[i].userID != loginUser.userName){
+                        user2.add(user[i]);
+                      }
+                    }
+
                     ScreenArgumentsDetail detail = ScreenArgumentsDetail(
                         record.recordID,
                         record.itemID,
@@ -734,7 +754,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         record.userName,
                         record.recordDate,
                         record.recordTime,
-                        user,
+                        user2,
                         record.description);
                     print("tabbed pasla");
                     Navigator.pop(context);
@@ -798,17 +818,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-
-  paslaOnayRed(Records record, int index, String durum) {
-    wsPaslaSonuc(
-        record.userName,
-       record.itemID,
-       record.recordID,
-        record.recordType,
-        durum);
+  paslaOnayRed(Records record, String durum) {
+    wsPaslaSonuc(record.userName, record.itemID, record.recordID,
+        record.recordType, durum);
   }
 
-    void wsPaslaSonuc(String eSorumlu, String item, String objectID,
+  void wsPaslaSonuc(String eSorumlu, String item, String objectID,
       String recordType, String result) {
     var wsOnay = """ 
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -832,7 +847,28 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     wsPaslaRequest(wsOnay, context);
   }
 
-   Future<Null> wsPaslaRequest(var envelope, BuildContext context) async {
+  void _showToast(BuildContext context,String result,String text) {
+
+
+      Color x ;
+      if(result == 'X'){
+          x = Colors.green; 
+      }
+      else{
+          x = Colors.red;
+      }
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: x,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+  }
+
+  Future<Null> wsPaslaRequest(var envelope, BuildContext context) async {
     http.Response response = await http.post(
         'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_route/100/zkits_ws_route/zkits_ws_route',
         headers: {
@@ -851,8 +887,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return null;
   }
 
-    Future _parsingOnay(var _response, BuildContext context) async {
-
+  Future _parsingOnay(var _response, BuildContext context) async {
     await Future.delayed(Duration(seconds: 1));
     var _document = xml.parse(_response);
 
@@ -862,16 +897,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         _document.findAllElements('EV_SONUC_DESC').map((node) => node.text);
 
     if (sonuc.contains("X")) {
-      print("ok -> "+ sonucDesc.toString());
-    } else {
-     print("fail -> " + sonucDesc.toString());
-    }
+      print("ok -> " + sonucDesc.toString());
 
+      _showToast(context,'X',sonucDesc.toString());
+    } else {
+      print("fail -> " + sonucDesc.toString());
+        _showToast(context,'', sonucDesc.toString());
+    }
+    refreshList();
     return null;
   }
-
-
-
 }
 
 const List<Choice> choices = const <Choice>[
