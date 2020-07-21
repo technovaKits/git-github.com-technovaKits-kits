@@ -130,13 +130,15 @@ List<User> user2 = new List();
                 title: Text("Belgeler"),
                 backgroundColor: Colors.blue),
             BottomNavigationBarItem(
-                icon: Icon(Icons.store),
-                title: Text("Diğer"),
+                icon: Icon(Icons.exit_to_app),
+                title: Text("Pas & Onay"),
                 backgroundColor: Colors.blue),
           ],
           onTap: (index) {
             setState(() {
-              _page = index;
+              _page = index;    
+
+              //test
             });
           },
         ),
