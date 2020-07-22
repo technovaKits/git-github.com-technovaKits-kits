@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,7 +8,6 @@ import 'package:kits/classes/LoginUser.dart';
 import 'package:kits/classes/NewRecordType.dart';
 import 'package:kits/classes/RecordTypes.dart';
 import 'package:kits/classes/Records.dart';
-import 'package:kits/classes/ScreenArgument.dart';
 import 'package:http/http.dart' as http;
 import 'package:kits/classes/ScreenArgumentDetail.dart';
 import 'package:kits/classes/User.dart';
@@ -17,6 +15,7 @@ import 'package:kits/classes/User.dart';
 import 'package:kits/pages/login.dart';
 import 'package:kits/pages/paslaPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:xml/xml.dart' as xml;
 
 const Color backGrountGrey = Colors.white;
@@ -66,7 +65,7 @@ class Debouncer {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   List<User> user = new List();
-List<User> user2 = new List();
+  List<User> user2 = new List();
 
   List<Records> filteredRecords = List();
   List<NewRecordType> newRecordList = List();
@@ -83,7 +82,6 @@ List<User> user2 = new List();
   LoginUser loginUser;
   _MyHomePageState(this.loginUser);
   GoogleSignInAccount _currentUser;
-  GlobalKey _bottomNavigationKey = GlobalKey();
 
   void _select(Choice choice) {
     // Causes the app to rebuild with the new _selectedChoice.
@@ -92,7 +90,6 @@ List<User> user2 = new List();
     });
     if (_selectedChoice.id == 'exit') {
       //çıkış yapar
-
       _showMyDialog();
       //_handleSignOut();
     }
@@ -136,17 +133,17 @@ List<User> user2 = new List();
           ],
           onTap: (index) {
             setState(() {
-              _page = index;    
+              _page = index;
 
               //test
             });
           },
         ),
-        body: screens(_page, _selectedTypeList));
+        body: screens(_page));
   }
 
   //* Ekranlar arasında geçiş yapılacak bölüm.
-  Widget screens(int index, String type) {
+  Widget screens(int index) {
     if (index == 0) {
       return firstPage();
     } else if (index == 1) {
@@ -249,7 +246,31 @@ List<User> user2 = new List();
   }
 
   Widget firstPage() {
-    return Text("test");
+    return 
+    SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        // Chart title
+        title: ChartTitle(text: 'Aylık belge sayısı'),
+        // Enable legend
+        legend: Legend(isVisible: true),
+        // Enable tooltip
+        tooltipBehavior: TooltipBehavior(enable: true),
+        series: <ChartSeries<SalesData, String>>[
+          LineSeries<SalesData, String>(
+              dataSource: <SalesData>[
+                SalesData('Jan', 35),
+                SalesData('Feb', 28),
+                SalesData('Mar', 34),
+                SalesData('Apr', 32),
+                SalesData('May', 40),
+                SalesData('Haz', 30)
+              ],
+              xValueMapper: (SalesData sales, _) => sales.year,
+              yValueMapper: (SalesData sales, _) => sales.sales,
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: true))
+        ])
+        ;
   }
 
   Widget secondPageList() {
@@ -525,69 +546,6 @@ List<User> user2 = new List();
     );
   }
 
-  Widget _buildItemCardChild(RecordTypes item) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              child: RichText(
-                overflow: TextOverflow.fade,
-                strutStyle: StrutStyle(fontSize: 10.0),
-                text: TextSpan(
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                    text: item.getTypeDesc),
-              ),
-            ),
-            Container(
-              width: 1.0,
-              height: 1.0,
-              color: Colors.white,
-            ),
-            IconButton(
-              onPressed: () {
-                /*Navigator.pushNamed(context, '/listPage',
-                                       arguments: recordList);*/
-              },
-              icon: Icon(
-                Icons.menu,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              item.count.toString(),
-              style: TextStyle(
-                fontSize: 35,
-                decorationColor: Colors.amberAccent,
-                color: Colors.lightBlue,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              item.typeDesc.toString(),
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-          ],
-        )
-      ],
-    );
-  }
-
   String userNameSet(String uname) {
     return """<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"
                           xmlns:urn=\"urn:sap-com:document:sap:rfc:functions\"> 
@@ -742,9 +700,8 @@ List<User> user2 = new List();
                   ),
                   title: new Text("Paslama"),
                   onTap: () {
-                    
-                    for(var i = 0 ; i < user.length ; i++){
-                      if(user[i].userID != loginUser.userName){
+                    for (var i = 0; i < user.length; i++) {
+                      if (user[i].userID != loginUser.userName) {
                         user2.add(user[i]);
                       }
                     }
@@ -773,6 +730,7 @@ List<User> user2 = new List();
                     title: new Text("İgnore et"),
                     onTap: () {
                       print("tabbed detail");
+                      ignoreIstegiGonder(record);
                       Navigator.pop(context);
                       setState(() {});
                     }),
@@ -820,6 +778,8 @@ List<User> user2 = new List();
     );
   }
 
+  Widget dashboard() {}
+
   paslaOnayRed(Records record, String durum) {
     wsPaslaSonuc(record.userName, record.itemID, record.recordID,
         record.recordType, durum);
@@ -849,16 +809,13 @@ List<User> user2 = new List();
     wsPaslaRequest(wsOnay, context);
   }
 
-  void _showToast(BuildContext context,String result,String text) {
-
-
-      Color x ;
-      if(result == 'X'){
-          x = Colors.green; 
-      }
-      else{
-          x = Colors.red;
-      }
+  void _showToast(BuildContext context, String result, String text) {
+    Color x;
+    if (result == 'X') {
+      x = Colors.green;
+    } else {
+      x = Colors.red;
+    }
     Fluttertoast.showToast(
         msg: text,
         toastLength: Toast.LENGTH_SHORT,
@@ -866,8 +823,7 @@ List<User> user2 = new List();
         timeInSecForIos: 1,
         backgroundColor: x,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 
   Future<Null> wsPaslaRequest(var envelope, BuildContext context) async {
@@ -901,12 +857,81 @@ List<User> user2 = new List();
     if (sonuc.contains("X")) {
       print("ok -> " + sonucDesc.toString());
 
-      _showToast(context,'X',sonucDesc.toString());
+      _showToast(context, 'X', sonucDesc.toString());
     } else {
       print("fail -> " + sonucDesc.toString());
-        _showToast(context,'', sonucDesc.toString());
+      _showToast(context, '', sonucDesc.toString());
     }
     refreshList();
+    return null;
+  }
+
+  void ignoreIstegiGonder(Records record) {
+    var envelope =
+        """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZkitsIgnore>
+         <!--Optional:-->
+         <IsRecord>
+            <RecordId>${record.recordID}</RecordId>
+            <ItemId>${record.itemID}</ItemId>
+         </IsRecord>
+         <!--Optional:-->
+         <IvUname>${record.userName}</IvUname>
+      </urn:ZkitsIgnore>
+   </soapenv:Body>
+</soapenv:Envelope>""";
+
+    wsIgnoreRequest(envelope, context);
+  }
+
+  Future<Null> wsIgnoreRequest(var envelope2, BuildContext context) async {
+    http.Response response = await http.post(
+        'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ignore/100/zkits_ignore/zkits_ignore',
+        headers: {
+          "Content-Type": "text/xml;charset=UTF-8",
+          "SOAPAction":
+              "urn:sap-com:document:sap:soap:functions:mc-style:zkits_ignore:ZkitsIgnoreRequest",
+          "Host": "crm.technova.com.tr:8001"
+        },
+        body: envelope2);
+    var _response = response.body;
+
+    await _parsingIgnore(_response, context);
+
+    setState(() {});
+
+    return null;
+  }
+
+  Future _parsingIgnore(var _response, BuildContext context) async {
+    await Future.delayed(Duration(seconds: 1));
+    var _document = xml.parse(_response);
+
+    final sonuc =
+        _document.findAllElements('EvSuccess').map((node) => node.text);
+
+    if (sonuc.contains("X")) {
+      Fluttertoast.showToast(
+          msg: "Başarılı",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Başarısız",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+
+    refreshList();
+
     return null;
   }
 }
@@ -915,3 +940,10 @@ const List<Choice> choices = const <Choice>[
   const Choice(id: 'noti', title: 'Bildirimler', icon: Icons.notifications),
   const Choice(id: 'exit', title: 'Çıkış yap', icon: Icons.notifications)
 ];
+
+class SalesData {
+  SalesData(this.year, this.sales);
+
+  final String year;
+  final double sales;
+}

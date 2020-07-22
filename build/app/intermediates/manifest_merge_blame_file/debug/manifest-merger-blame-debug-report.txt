@@ -135,101 +135,109 @@
 76        </service>
 77
 78        <activity
-78-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:24:9-31:50
-79            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-79-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:25:13-85
-80            android:excludeFromRecents="true"
-80-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:26:13-46
-81            android:exported="true"
-81-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:27:13-36
-82            android:launchMode="singleTask"
-82-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:28:13-44
-83            android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
-83-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:29:13-102
-84            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-84-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:30:13-72
-85        <activity
-85-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:23:9-27:75
-86            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-86-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:24:13-93
-87            android:excludeFromRecents="true"
-87-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:25:13-46
-88            android:exported="false"
-88-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:26:13-37
-89            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-89-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:27:13-72
-90        <!--
-91            Service handling Google Sign-In user revocation. For apps that do not integrate with
-92            Google Sign-In, this service will never be started.
-93        -->
-94        <service
-94-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:33:9-36:110
-95            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-95-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:34:13-89
-96            android:exported="true"
-96-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:35:13-36
-97            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" />
-97-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:36:13-107
-98        <!--
-99             FirebaseMessagingService performs security checks at runtime,
-100             but set to not exported to explicitly avoid allowing another app to call it.
-101        -->
-102        <service
-102-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:28:9-34:19
-103            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-103-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:29:13-82
-104            android:exported="false" >
-104-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:30:13-37
-105            <intent-filter android:priority="-500" >
-105-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:29
-106                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-106-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-78
-106-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:25-75
-107            </intent-filter>
-108        </service>
-109
-110        <receiver
-110-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:37:9-44:20
-111            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-111-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:38:13-78
-112            android:exported="true"
-112-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:39:13-36
-113            android:permission="com.google.android.c2dm.permission.SEND" >
-113-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:40:13-73
-114            <intent-filter>
-114-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:41:13-43:29
-115                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-115-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:42:17-81
-115-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:42:25-78
-116            </intent-filter>
-117        </receiver>
-118
-119        <provider
-119-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
-120            android:name="com.google.firebase.provider.FirebaseInitProvider"
-120-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
-121            android:authorities="com.technova.kits.firebaseinitprovider"
-121-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
-122            android:exported="false"
-122-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
-123            android:initOrder="100" />
-123-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
-124
-125        <activity
-125-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
-126            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-126-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:24:13-79
-127            android:exported="false"
-127-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:25:13-37
-128            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-128-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:26:13-72
-129
-130        <meta-data
-130-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\23ba29ff602f2685a7aa452285b8ff04\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-131            android:name="com.google.android.gms.version"
-131-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\23ba29ff602f2685a7aa452285b8ff04\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-132            android:value="@integer/google_play_services_version" />
-132-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\23ba29ff602f2685a7aa452285b8ff04\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-133    </application>
-134
-135</manifest>
+78-->[:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
+79            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+79-->[:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
+80            android:exported="false"
+80-->[:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
+81            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+81-->[:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
+82        <activity
+82-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:24:9-31:50
+83            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+83-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:25:13-85
+84            android:excludeFromRecents="true"
+84-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:26:13-46
+85            android:exported="true"
+85-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:27:13-36
+86            android:launchMode="singleTask"
+86-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:28:13-44
+87            android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
+87-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:29:13-102
+88            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+88-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:30:13-72
+89        <activity
+89-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:23:9-27:75
+90            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+90-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:24:13-93
+91            android:excludeFromRecents="true"
+91-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:25:13-46
+92            android:exported="false"
+92-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:26:13-37
+93            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+93-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:27:13-72
+94        <!--
+95            Service handling Google Sign-In user revocation. For apps that do not integrate with
+96            Google Sign-In, this service will never be started.
+97        -->
+98        <service
+98-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:33:9-36:110
+99            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+99-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:34:13-89
+100            android:exported="true"
+100-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:35:13-36
+101            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" />
+101-->[com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:36:13-107
+102        <!--
+103             FirebaseMessagingService performs security checks at runtime,
+104             but set to not exported to explicitly avoid allowing another app to call it.
+105        -->
+106        <service
+106-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:28:9-34:19
+107            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+107-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:29:13-82
+108            android:exported="false" >
+108-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:30:13-37
+109            <intent-filter android:priority="-500" >
+109-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:29
+110                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+110-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-78
+110-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:25-75
+111            </intent-filter>
+112        </service>
+113
+114        <receiver
+114-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:37:9-44:20
+115            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+115-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:38:13-78
+116            android:exported="true"
+116-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:39:13-36
+117            android:permission="com.google.android.c2dm.permission.SEND" >
+117-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:40:13-73
+118            <intent-filter>
+118-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:41:13-43:29
+119                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+119-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:42:17-81
+119-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:42:25-78
+120            </intent-filter>
+121        </receiver>
+122
+123        <provider
+123-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+124            android:name="com.google.firebase.provider.FirebaseInitProvider"
+124-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+125            android:authorities="com.technova.kits.firebaseinitprovider"
+125-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+126            android:exported="false"
+126-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+127            android:initOrder="100" />
+127-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+128
+129        <activity
+129-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
+130            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+130-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:24:13-79
+131            android:exported="false"
+131-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:25:13-37
+132            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+132-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\8ac2c71cc9965485e4fc4eaca5d4253a\play-services-base-17.1.0\AndroidManifest.xml:26:13-72
+133
+134        <meta-data
+134-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\23ba29ff602f2685a7aa452285b8ff04\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+135            android:name="com.google.android.gms.version"
+135-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\23ba29ff602f2685a7aa452285b8ff04\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+136            android:value="@integer/google_play_services_version" />
+136-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\23ba29ff602f2685a7aa452285b8ff04\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+137    </application>
+138
+139</manifest>

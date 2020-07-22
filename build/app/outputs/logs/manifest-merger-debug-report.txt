@@ -7,12 +7,13 @@ INJECTED from C:\Users\technova\Desktop\flutter project\git-github.com-technovaK
 MERGED from C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:1:1-27:12
 MERGED from [:google_sign_in] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:fluttertoast] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
-MERGED from [:google_sign_in_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:firebase_auth_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:google_sign_in_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:firebase_core_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-20:12
+MERGED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-14:12
 MERGED from [:connectivity] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-10:12
 MERGED from [:shared_preferences] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:17:1-42:12
@@ -90,6 +91,8 @@ MERGED from [:firebase_core] C:\Users\technova\Desktop\flutter project\git-githu
 MERGED from [:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-13:19
 MERGED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-18:19
 MERGED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-18:19
+MERGED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-12:19
+MERGED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-12:19
 MERGED from [com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:23:5-40:19
 MERGED from [com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:23:5-40:19
 MERGED from [com.google.android.gms:play-services-auth:16.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\3014993be3509e51d4f0a50f5fa7b8d5\jetified-play-services-auth-16.0.1\AndroidManifest.xml:22:5-37:19
@@ -174,18 +177,20 @@ MERGED from [:google_sign_in] C:\Users\technova\Desktop\flutter project\git-gith
 MERGED from [:google_sign_in] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:google_sign_in_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:google_sign_in_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:google_sign_in_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:google_sign_in_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\google_sign_in_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_core_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_core_web] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:connectivity] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:connectivity] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
@@ -310,6 +315,14 @@ ADDED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-g
 		ADDED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:16:17-82
 	android:name
 		ADDED from [:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:15:17-127
+activity#io.flutter.plugins.urllauncher.WebViewActivity
+ADDED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
+	android:exported
+		ADDED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
+	android:theme
+		ADDED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
+	android:name
+		ADDED from [:url_launcher] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [:connectivity] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-76
 	android:name

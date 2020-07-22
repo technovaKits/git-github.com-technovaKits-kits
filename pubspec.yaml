@@ -36,6 +36,7 @@ dependencies:
   flutter_auth_buttons: ^0.6.0
   firebase_messaging: ^6.0.16
   shared_preferences: ^0.5.7+3
+  syncfusion_flutter_charts: ^18.2.46
 
 
   google_sign_in: ^4.0.1+3
