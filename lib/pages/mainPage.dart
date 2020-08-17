@@ -200,6 +200,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Future<Null> getUsers() async {
+
+
     var envelope2 =
         "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" "
         "xmlns:urn=\"urn:sap-com:document:sap:rfc:functions\"><soapenv:Header/><soapenv:Body>"
@@ -228,6 +230,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Future _parsing2(var _response) async {
     //pr.show();
     await Future.delayed(Duration(seconds: 1));
+    // ignore: deprecated_member_use
     var _document = xml.parse(_response);
 
     Iterable<xml.XmlElement> items = _document.findAllElements('item');
@@ -700,8 +703,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   ),
                   title: new Text("Paslama"),
                   onTap: () {
+                      user2.clear();
                     for (var i = 0; i < user.length; i++) {
-                      if (user[i].userID != loginUser.userName) {
+                        if (user[i].userID != loginUser.userName) {
                         user2.add(user[i]);
                       }
                     }

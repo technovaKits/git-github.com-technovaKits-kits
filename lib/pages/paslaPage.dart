@@ -153,6 +153,7 @@ class _HomePageState extends State<DetailPage> {
   Future _parsing(var _response, BuildContext context) async {
  
     await Future.delayed(Duration(seconds: 1));
+    // ignore: deprecated_member_use
     var _document = xml.parse(_response);
 
     final sonuc =

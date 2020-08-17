@@ -471,7 +471,7 @@
     },
     {
       "name": "xml2json",
-      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/xml2json-4.1.1",
+      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/xml2json-4.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
@@ -482,7 +482,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-07-22T09:30:37.551359Z",
+  "generated": "2020-08-17T09:49:48.442643Z",
   "generator": "pub",
   "generatorVersion": "2.8.4"
 }
