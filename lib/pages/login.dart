@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:kits/Widgets/FormCard.dart';
+import 'package:kits/Widgets/SocialIcon.dart';
+import 'package:kits/classes/CustomIcons.dart';
 import 'package:kits/classes/LoginUser.dart';
 import 'package:kits/pages/mainPage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -21,6 +25,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _SignInDemoState extends State<LoginPage> {
+  bool _isSelected = false;
+
+  void _radio() {
+    setState(() {
+      _isSelected = !_isSelected;
+    });
+  }
+
   bool
       firstLoginCheck; // true -> daha önce giriş yapıldı. null&false -> ilk giriş
   bool isLogin;
@@ -36,7 +48,8 @@ class _SignInDemoState extends State<LoginPage> {
     _firebaseMessaging.getToken().then(
         (token) => _sendToBackendToken(_googleSignIn.currentUser.email, token));
 
-    setFirstLoginCheck(true); //evet giriş yapıldı ilk kez , firstLoginCheck True olacak.
+    setFirstLoginCheck(
+        true); //evet giriş yapıldı ilk kez , firstLoginCheck True olacak.
   }
 
   @override
@@ -60,33 +73,178 @@ class _SignInDemoState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance =
+        ScreenUtil(width: 750, height: 1334, allowFontScaling: true)
+          ..init(context);
+
     return Scaffold(
       body: Center(child: _buildBody(context)),
     );
   }
 
+  Widget radioButton(bool isSelected) => Container(
+        width: 20.0,
+        height: 20.0,
+        padding: EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(width: 2.0, color: Colors.black),
+        ),
+        child: isSelected
+            ? Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
+              )
+            : Container(),
+      );
+
+  Widget horizontalLine() => Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Container(
+          width: ScreenUtil.getInstance().setWidth(120),
+          height: 1.0,
+          color: Colors.black26.withOpacity(.2),
+        ),
+      );
+
   Widget _buildBody(BuildContext context) {
-          
-      if (_currentUser == null) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('You are not signed in..'),
-            GoogleSignInButton(
-              text: "Sign In",
-              darkMode: false,
-              onPressed: _handleSignIn,
-            ),
-          ],
-        );
-      } else if (_currentUser != null) {
-        //mail adresi ile sistemdeki mail eşleşiyor mu ?
-        loginCheck(_currentUser.email, context);
-        return Text("Giriş yapılıyor.");
-      }
-    
+    if (_currentUser == null) {
+      return Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: Image.asset('assets/image_01.png')),
+              Expanded(
+                child: Container(),
+              ),
+              Image.asset('assets/image_02.png'),
+            ],
+          ),
+          SingleChildScrollView(
+              child: Padding(
+                  padding: EdgeInsets.only(left: 28.0, right: 28.0, top: 60.0),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/logo2.png',
+                            width: ScreenUtil.getInstance().setWidth(110),
+                            height: ScreenUtil.getInstance().setHeight(110),
+                          ),
+                          Text('KITS',
+                              style: TextStyle(
+                                fontSize: ScreenUtil.getInstance().setSp(46),
+                                letterSpacing: .6,
+                                fontWeight: FontWeight.bold,
+                              ))
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.getInstance().setHeight(180),
+                      ),
+                      FormCard(),
+                      SizedBox(
+                        height: ScreenUtil.getInstance().setHeight(35),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          InkWell(
+                            child: Container(
+                                width: ScreenUtil.getInstance().setWidth(300),
+                                height: ScreenUtil.getInstance().setHeight(100),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Color(0xFF17ead9),
+                                    Color(0xFF6078ea)
+                                  ]),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xFF6078ea).withOpacity(.4),
+                                      offset: Offset(0.0, 8.0),
+                                      blurRadius: 8.0,
+                                    )
+                                  ],
+                                ),
+                                child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                        onTap: () {},
+                                        child: Center(
+                                            child: Text('GİRİŞ',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Poppins-Bold',
+                                                    fontSize: 18.0,
+                                                    letterSpacing: 1.0)))))),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.getInstance().setHeight(40),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          horizontalLine(),
+                          Text('Social Login',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: 'Poppins-Medium',
+                              )),
+                          horizontalLine(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.getInstance().setHeight(40),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          GoogleSignInButton(
+                            text: "Google ile bağlan",
+                            darkMode: false,
+                            onPressed: _handleSignIn,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.getInstance().setHeight(30),
+                      )
+                    ],
+                  ))),
+        ],
+      );
+
+      /*Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('You are not signed in..'),
+          GoogleSignInButton(
+            text: "Sign In",
+            darkMode: false,
+            onPressed: _handleSignIn,
+          ),
+        ],
+      );*/
+    } else if (_currentUser != null) {
+      //mail adresi ile sistemdeki mail eşleşiyor mu ?
+      loginCheck(_currentUser.email, context);
+      return Text("Giriş yapılıyor.");
+    }
+
     return Text("Giriş yapılıyor.");
   }
 
@@ -267,7 +425,7 @@ class _SignInDemoState extends State<LoginPage> {
     });
     print("firstLogin get edildi.  $firstLoginCheck ");
   }
-  
+
   void setLoginStatus(bool login, LoginUser loginUser) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool("login", true);
