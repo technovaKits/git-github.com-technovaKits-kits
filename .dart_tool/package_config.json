@@ -74,6 +74,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "email_validator",
+      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/email_validator-1.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "1.24"
+    },
+    {
       "name": "fancy_dialog",
       "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/fancy_dialog-1.0.3",
       "packageUri": "lib/",
@@ -488,7 +494,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-08-19T17:55:42.652442Z",
+  "generated": "2020-08-20T15:01:29.560803Z",
   "generator": "pub",
   "generatorVersion": "2.8.4"
 }

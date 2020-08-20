@@ -1,12 +1,10 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:kits/Widgets/FormCard.dart';
-import 'package:kits/Widgets/SocialIcon.dart';
-import 'package:kits/classes/CustomIcons.dart';
 import 'package:kits/classes/LoginUser.dart';
 import 'package:kits/pages/mainPage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -25,13 +23,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _SignInDemoState extends State<LoginPage> {
-  bool _isSelected = false;
+  final myControllerMail = TextEditingController();
+  final myControllerPass = TextEditingController();
 
-  void _radio() {
-    setState(() {
-      _isSelected = !_isSelected;
-    });
-  }
+  final _formKey = GlobalKey<FormState>();
+  FocusNode _emailFocusNode = FocusNode();
+  String _username, _email, _password = "";
+
+  bool passBlank = false;
+  FocusNode _passwordFocusNode = FocusNode();
+
+  bool _isSelected = false;
 
   bool
       firstLoginCheck; // true -> daha önce giriş yapıldı. null&false -> ilk giriş
@@ -114,7 +116,7 @@ class _SignInDemoState extends State<LoginPage> {
   Widget _buildBody(BuildContext context) {
     if (_currentUser == null) {
       return Stack(
-        fit: StackFit.expand,
+        fit: StackFit.loose,
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -128,129 +130,267 @@ class _SignInDemoState extends State<LoginPage> {
               Image.asset('assets/image_02.png'),
             ],
           ),
-          SingleChildScrollView(
-              child: Padding(
-                  padding: EdgeInsets.only(left: 28.0, right: 28.0, top: 60.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/logo2.png',
-                            width: ScreenUtil.getInstance().setWidth(110),
-                            height: ScreenUtil.getInstance().setHeight(110),
-                          ),
-                          Text('KITS',
-                              style: TextStyle(
-                                fontSize: ScreenUtil.getInstance().setSp(46),
-                                letterSpacing: .6,
-                                fontWeight: FontWeight.bold,
-                              ))
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.getInstance().setHeight(180),
-                      ),
-                      FormCard(),
-                      SizedBox(
-                        height: ScreenUtil.getInstance().setHeight(35),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          InkWell(
-                            child: Container(
-                                width: ScreenUtil.getInstance().setWidth(300),
-                                height: ScreenUtil.getInstance().setHeight(100),
+          Container(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                    child: Padding(
+                        padding:
+                            EdgeInsets.only(left: 10.0, right: 10.0, top: 60.0),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Image.asset(
+                                  'assets/logo2.png',
+                                  width: ScreenUtil.getInstance().setWidth(110),
+                                  height:
+                                      ScreenUtil.getInstance().setHeight(110),
+                                ),
+                                Text('KITS',
+                                    style: TextStyle(
+                                      fontSize:
+                                          ScreenUtil.getInstance().setSp(46),
+                                      letterSpacing: .6,
+                                      fontWeight: FontWeight.bold,
+                                    ))
+                              ],
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.getInstance().setHeight(180),
+                            ),
+                            Container(
+                                width: double.infinity,
+                                height: ScreenUtil.getInstance().setHeight(450),
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    Color(0xFF17ead9),
-                                    Color(0xFF6078ea)
-                                  ]),
-                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8.0),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Color(0xFF6078ea).withOpacity(.4),
-                                      offset: Offset(0.0, 8.0),
-                                      blurRadius: 8.0,
-                                    )
+                                      color: Colors.black12,
+                                      offset: Offset(0.0, 15.0),
+                                      blurRadius: 15.0,
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset: Offset(0.0, -10.0),
+                                      blurRadius: 10.0,
+                                    ),
                                   ],
                                 ),
-                                child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                        onTap: () {},
-                                        child: Center(
-                                            child: Text('GİRİŞ',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'Poppins-Bold',
-                                                    fontSize: 18.0,
-                                                    letterSpacing: 1.0)))))),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.getInstance().setHeight(40),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          horizontalLine(),
-                          Text('Social Login',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontFamily: 'Poppins-Medium',
-                              )),
-                          horizontalLine(),
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.getInstance().setHeight(40),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          GoogleSignInButton(
-                            text: "Google ile bağlan",
-                            darkMode: false,
-                            onPressed: _handleSignIn,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.getInstance().setHeight(30),
-                      )
-                    ],
-                  ))),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 16.0, top: 16.0, right: 16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Login',
+                                          style: TextStyle(
+                                            fontSize: ScreenUtil.getInstance()
+                                                .setSp(45),
+                                            fontFamily: 'Poppins-Bold',
+                                            letterSpacing: .6,
+                                          )),
+                                      SizedBox(
+                                        height: ScreenUtil.getInstance()
+                                            .setHeight(30),
+                                      ),
+                                      emailInput(),
+                                      passwordInput(),
+                                      SizedBox(
+                                        height: ScreenUtil.getInstance()
+                                            .setHeight(30),
+                                      ),
+                                      SizedBox(
+                                        height: ScreenUtil.getInstance()
+                                            .setHeight(35),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: <Widget>[
+                                          Text('Şifrenizi mi unuttunuz?',
+                                              style: TextStyle(
+                                                color: Colors.blue,
+                                                fontFamily: 'Poppins-Medium',
+                                                fontSize:
+                                                    ScreenUtil.getInstance()
+                                                        .setSp(28),
+                                              ))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: ScreenUtil.getInstance()
+                                            .setHeight(30),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                            SizedBox(
+                              height: ScreenUtil.getInstance().setHeight(35),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                InkWell(
+                                  child: Container(
+                                      width: ScreenUtil.getInstance()
+                                          .setWidth(300),
+                                      height: ScreenUtil.getInstance()
+                                          .setHeight(100),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                          Color(0xFF17ead9),
+                                          Color(0xFF6078ea)
+                                        ]),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xFF6078ea)
+                                                .withOpacity(.4),
+                                            offset: Offset(0.0, 8.0),
+                                            blurRadius: 8.0,
+                                          )
+                                        ],
+                                      ),
+                                      child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                              onTap: () {
+                                                if (_formKey.currentState
+                                                    .validate()) {
+                                                  _formKey.currentState.save();
+                                                }
+
+                                                if (EmailValidator.validate(
+                                                    myControllerMail.text) && passBlank == true) {
+                                                  loginCheck(
+                                                      myControllerMail.text,
+                                                      myControllerPass.text,
+                                                      "",
+                                                      context);
+                                                }
+                                              },
+                                              child: Center(
+                                                  child: Text('GİRİŞ',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              'Poppins-Bold',
+                                                          fontSize: 18.0,
+                                                          letterSpacing:
+                                                              1.0)))))),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.getInstance().setHeight(40),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                horizontalLine(),
+                                Text('Social Login',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontFamily: 'Poppins-Medium',
+                                    )),
+                                horizontalLine(),
+                              ],
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.getInstance().setHeight(40),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                GoogleSignInButton(
+                                  text: "Google ile bağlan",
+                                  darkMode: false,
+                                  onPressed: _handleSignIn,
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.getInstance().setHeight(50),
+                            )
+                          ],
+                        ))),
+              )),
         ],
       );
-
-      /*Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('You are not signed in..'),
-          GoogleSignInButton(
-            text: "Sign In",
-            darkMode: false,
-            onPressed: _handleSignIn,
-          ),
-        ],
-      );*/
     } else if (_currentUser != null) {
       //mail adresi ile sistemdeki mail eşleşiyor mu ?
-      loginCheck(_currentUser.email, context);
+      loginCheck(_currentUser.email, "", "X", context);
       return Text("Giriş yapılıyor.");
     }
 
     return Text("Giriş yapılıyor.");
   }
 
-  void loginCheck(String mailAddress, BuildContext context) {
-    var envelope = """ 
-    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+  Widget passwordInput() {
+    return TextFormField(
+      controller: myControllerPass,
+      focusNode: _passwordFocusNode,
+      keyboardType: TextInputType.text,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: "Password",
+        suffixIcon: Icon(Icons.lock),
+      ),
+      textInputAction: TextInputAction.done,
+      validator: (password) {
+        if (password == "") {
+          passBlank = false;
+          return 'Şifre boş olamaz';
+        } else {
+          passBlank = true;
+          return null;
+        }
+      },
+      onSaved: (password) => _password = password,
+    );
+  }
+
+  Widget emailInput() {
+    return TextFormField(
+      controller: myControllerMail,
+      focusNode: _emailFocusNode,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: "Email",
+        hintText: "e.g abc@gmail.com",
+      ),
+      textInputAction: TextInputAction.next,
+      validator: (email) =>
+          EmailValidator.validate(email) ? null : "Invalid email address",
+      onSaved: (email) => _email = email,
+      onFieldSubmitted: (_) {
+        fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
+      },
+    );
+  }
+
+  void loginCheck(String mailAddress, String password, String isGoogle,
+      BuildContext context) {
+    var envelope =
+        """ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZKITS_USERMAIL>
+         <!--Optional:-->
+         <IV_GOOGLE>$isGoogle</IV_GOOGLE>
+         <!--Optional:-->
+         <IV_MAIL>$mailAddress</IV_MAIL>
+         <!--Optional:-->
+         <IV_PASSWORD>$password</IV_PASSWORD>
+      </urn:ZKITS_USERMAIL>
+   </soapenv:Body>
+</soapenv:Envelope> """;
+    /* <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
     xmlns:urn="urn:sap-com:document:sap:rfc:functions">
    <soapenv:Header/>
    <soapenv:Body>
@@ -259,7 +399,7 @@ class _SignInDemoState extends State<LoginPage> {
          <IV_MAIL>$mailAddress</IV_MAIL>
       </urn:ZKITS_USERMAIL>
    </soapenv:Body>
-</soapenv:Envelope> """;
+</soapenv:Envelope> """;*/
 
     wsLoginRequest(envelope, context);
   }
@@ -278,11 +418,11 @@ class _SignInDemoState extends State<LoginPage> {
 
   Future wsLoginRequest(var envelope, BuildContext context) async {
     http.Response response = await http.post(
-        'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_usermail/100/zkits_ws_usermail/zkits_ws_usermail',
+        'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_userlogin/100/zkits_ws_userlogin/zkits_ws_userlogin',
         headers: {
           "Content-Type": "text/xml;charset=UTF-8",
           "SOAPAction":
-              "urn:sap-com:document:sap:rfc:functions:zkits_ws_usermail:ZKITS_USERMAILRequest",
+              "urn:sap-com:document:sap:rfc:functions:ZKITS_WS_USERLOGIN:ZKITS_USERMAILRequest",
           "Host": "crm.technova.com.tr:8001"
         },
         body: envelope);
@@ -297,6 +437,9 @@ class _SignInDemoState extends State<LoginPage> {
     var _document = xml.parse(_response);
 
     //final mail = _document.findAllElements('EV_MAIL').map((node) => node.text);
+
+    final result =
+        _document.findAllElements('EV_SUCCESS').map((node) => node.text);
     final uname =
         _document.findAllElements('EV_UNAME').map((node) => node.text);
     final userFullName =
@@ -307,7 +450,23 @@ class _SignInDemoState extends State<LoginPage> {
     /* eğer uname.first boş ise, bir şey dönmemiştir. Giriş yapılmıyor. 
      Email disconnect edilip başa dönüyor */
 
-    if (uname.first == "") {
+    if (result.first == "X") {
+      if (uname.first == "") {
+        Fluttertoast.showToast(
+            msg: "Giriş başarısız!.",
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.redAccent,
+            textColor: Colors.white,
+            fontSize: 16.0);
+
+        _googleSignIn.disconnect();
+      } else {
+        //giriş yapılıyor. mail ile sistemdeki mail eşleşmiş.
+        signIn(userFullName.first, uname.first, _currentUser);
+      }
+    } else {
+      //Giriş yapılmadı.
       Fluttertoast.showToast(
           msg: "Giriş başarısız!.",
           gravity: ToastGravity.TOP,
@@ -315,12 +474,13 @@ class _SignInDemoState extends State<LoginPage> {
           backgroundColor: Colors.redAccent,
           textColor: Colors.white,
           fontSize: 16.0);
-
-      _googleSignIn.disconnect();
-    } else {
-      //giriş yapılıyor. mail ile sistemdeki mail eşleşmiş.
-      signIn(userFullName.first, uname.first, _currentUser);
     }
+  }
+
+  void fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 
   getValue(Iterable<xml.XmlElement> items) {
@@ -344,7 +504,13 @@ class _SignInDemoState extends State<LoginPage> {
       } catch (e) {}
     }
 
-    LoginUser loginUser = new LoginUser(userName, uname, account.photoUrl);
+    String picture;
+
+    if (account != null) {
+      picture = account.photoUrl;
+    }
+
+    LoginUser loginUser = new LoginUser(userName, uname, picture);
 
     setLoginStatus(true, loginUser); //giriş yapıldı ve sharedpref kayıt edildi.
   }
