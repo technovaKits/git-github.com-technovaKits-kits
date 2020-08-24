@@ -30,6 +30,8 @@ class _SignInDemoState extends State<LoginPage> {
   FocusNode _emailFocusNode = FocusNode();
   String _username, _email, _password = "";
 
+  String globalToken = "";
+
   bool passBlank = false;
   FocusNode _passwordFocusNode = FocusNode();
 
@@ -46,9 +48,9 @@ class _SignInDemoState extends State<LoginPage> {
   String _message = '';
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  _registerToken() {
-    _firebaseMessaging.getToken().then(
-        (token) => _sendToBackendToken(_googleSignIn.currentUser.email, token));
+  _registerToken(String mail,String password,String isGoogle,String isFirstLogin) {
+    _firebaseMessaging.getToken().then((token) => loginCheckWithToken(mail,password,isGoogle,token,isFirstLogin)
+    ); //_sendToBackendToken(_googleSignIn.currentUser.email, token));
 
     setFirstLoginCheck(
         true); //evet giriş yapıldı ilk kez , firstLoginCheck True olacak.
@@ -266,7 +268,9 @@ class _SignInDemoState extends State<LoginPage> {
                                                 }
 
                                                 if (EmailValidator.validate(
-                                                    myControllerMail.text) && passBlank == true) {
+                                                        myControllerMail
+                                                            .text) &&
+                                                    passBlank == true) {
                                                   loginCheck(
                                                       myControllerMail.text,
                                                       myControllerPass.text,
@@ -324,6 +328,7 @@ class _SignInDemoState extends State<LoginPage> {
       );
     } else if (_currentUser != null) {
       //mail adresi ile sistemdeki mail eşleşiyor mu ?
+
       loginCheck(_currentUser.email, "", "X", context);
       return Text("Giriş yapılıyor.");
     }
@@ -376,7 +381,30 @@ class _SignInDemoState extends State<LoginPage> {
 
   void loginCheck(String mailAddress, String password, String isGoogle,
       BuildContext context) {
-    var envelope =
+        String token = "";
+    if (firstLoginCheck == null) {
+      //firstLoginCheck - ilk giriş mi ?
+      try {
+        getMessage();
+      } catch (e) {}
+
+      try {
+        _registerToken(mailAddress,password,isGoogle,"");
+      } catch (e) {}
+    }
+    else{
+
+      loginCheckWithToken(mailAddress,password,isGoogle,token,"");
+
+    }
+
+   
+  }
+
+  void loginCheckWithToken(String mailAddress, String password,String isGoogle,String token,String isFirstLogin){
+
+  
+     var envelope =
         """ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
    <soapenv:Header/>
    <soapenv:Body>
@@ -387,21 +415,16 @@ class _SignInDemoState extends State<LoginPage> {
          <IV_MAIL>$mailAddress</IV_MAIL>
          <!--Optional:-->
          <IV_PASSWORD>$password</IV_PASSWORD>
+         <!--Optional:-->
+         <IV_TOKEN>$token</IV_TOKEN>
+         <!--Optional:-->
+         <IV_TOKEN_CHECK>$isFirstLogin</IV_TOKEN_CHECK>
       </urn:ZKITS_USERMAIL>
    </soapenv:Body>
 </soapenv:Envelope> """;
-    /* <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:urn="urn:sap-com:document:sap:rfc:functions">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <urn:ZKITS_USERMAIL>
-         <!--Optional:-->
-         <IV_MAIL>$mailAddress</IV_MAIL>
-      </urn:ZKITS_USERMAIL>
-   </soapenv:Body>
-</soapenv:Envelope> """;*/
 
     wsLoginRequest(envelope, context);
+
   }
 
   Future<void> _handleSignIn() async {
@@ -462,7 +485,6 @@ class _SignInDemoState extends State<LoginPage> {
 
         _googleSignIn.disconnect();
       } else {
-        //giriş yapılıyor. mail ile sistemdeki mail eşleşmiş.
         signIn(userFullName.first, uname.first, _currentUser);
       }
     } else {
@@ -493,16 +515,16 @@ class _SignInDemoState extends State<LoginPage> {
 
 // Uygulama ana ekranına giriş yapılması
   signIn(String userName, String uname, GoogleSignInAccount account) {
-    if (firstLoginCheck == null) {
+    /*if (firstLoginCheck == null) {
       //firstLoginCheck - ilk giriş mi ?
       try {
         getMessage();
       } catch (e) {}
 
       try {
-        _registerToken();
+      //  _registerToken();
       } catch (e) {}
-    }
+    }*/
 
     String picture;
 
@@ -514,7 +536,7 @@ class _SignInDemoState extends State<LoginPage> {
 
     setLoginStatus(true, loginUser); //giriş yapıldı ve sharedpref kayıt edildi.
   }
-
+/* 
   _sendToBackendToken(String mail, String token) {
     var envelope =
         """ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
@@ -533,7 +555,7 @@ class _SignInDemoState extends State<LoginPage> {
     print("$mail , $token");
   }
 
-  Future<Null> wsSendToBackendToken(var envelope) async {
+ Future<Null> wsSendToBackendToken(var envelope) async {
     http.Response response = await http.post(
         'http://crm.technova.com.tr:8001/sap/bc/srt/rfc/sap/zkits_ws_save_token/100/zkits_ws_save_token/zkits_ws_save_token',
         headers: {
@@ -561,7 +583,7 @@ class _SignInDemoState extends State<LoginPage> {
     } else if (result.first == "0") {
       print("fail");
     }
-  }
+  }*/
 
   void getMessage() {
     _firebaseMessaging.configure(
