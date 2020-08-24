@@ -28,14 +28,12 @@ class _SignInDemoState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
   FocusNode _emailFocusNode = FocusNode();
-  String _username, _email, _password = "";
-
+ 
   String globalToken = "";
 
   bool passBlank = false;
   FocusNode _passwordFocusNode = FocusNode();
 
-  bool _isSelected = false;
 
   bool
       firstLoginCheck; // true -> daha önce giriş yapıldı. null&false -> ilk giriş
@@ -45,6 +43,7 @@ class _SignInDemoState extends State<LoginPage> {
   String loginUserName, loginUname;
 
   ProgressDialog progressDialog;
+  // ignore: unused_field
   String _message = '';
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -356,7 +355,7 @@ class _SignInDemoState extends State<LoginPage> {
           return null;
         }
       },
-      onSaved: (password) => _password = password,
+      onSaved: (password) => password = password,
     );
   }
 
@@ -372,7 +371,7 @@ class _SignInDemoState extends State<LoginPage> {
       textInputAction: TextInputAction.next,
       validator: (email) =>
           EmailValidator.validate(email) ? null : "Invalid email address",
-      onSaved: (email) => _email = email,
+      onSaved: (email) => email = email,
       onFieldSubmitted: (_) {
         fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
       },
@@ -435,6 +434,7 @@ class _SignInDemoState extends State<LoginPage> {
     }
   }
 
+  // ignore: unused_element
   Future<void> _handleSignOut() async {
     _googleSignIn.disconnect();
   }

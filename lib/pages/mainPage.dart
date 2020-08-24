@@ -10,13 +10,15 @@ import 'package:kits/classes/RecordTypes.dart';
 import 'package:kits/classes/Records.dart';
 import 'package:http/http.dart' as http;
 import 'package:kits/classes/ScreenArgumentDetail.dart';
+import 'package:kits/classes/SubscriberSeries.dart';
+import 'package:kits/classes/Subscriber_chart.dart';
 import 'package:kits/classes/User.dart';
 //import 'package:kits/pages/list.dart';
 import 'package:kits/pages/login.dart';
 import 'package:kits/pages/paslaPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:xml/xml.dart' as xml;
+import 'package:charts_flutter/flutter.dart' as charts;
 
 const Color backGrountGrey = Colors.white;
 
@@ -32,12 +34,12 @@ List<RecordTypes> recordTypeList2 = List();
 var envelope;
 var map = Map();
 LoginUser loginUser;
-String _selectedTypeList = 'Grid';
 var refreshKey = GlobalKey<RefreshIndicatorState>();
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
 bool boolLongClicked = false;
 
+// ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
   final controller = ScrollController();
   static const routeName = '/mainPage2';
@@ -64,6 +66,56 @@ class Debouncer {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  /// Create one series with sample hard coded data.
+  // ignore: unused_element
+  static List<charts.Series<LinearSales, int>> _createSampleData() {
+    final data = [
+      new LinearSales(0, 100),
+      new LinearSales(1, 75),
+      new LinearSales(2, 25),
+      new LinearSales(3, 5),
+    ];
+
+    return [
+      new charts.Series<LinearSales, int>(
+        id: 'Sales',
+        domainFn: (LinearSales sales, _) => sales.year,
+        measureFn: (LinearSales sales, _) => sales.sales,
+        data: data,
+        // Set a label accessor to control the text of the arc label.
+        labelAccessorFn: (LinearSales row, _) => '${row.year}: ${row.sales}',
+      )
+    ];
+  }
+
+  final List<SubscriberSeries> data = [
+    SubscriberSeries(
+      month: "Ocak",
+      count: 134,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      month: "Şubat",
+      count: 123,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      month: "Mart",
+      count: 111,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      month: "Nisan",
+      count: 55,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      month: "Mayıs",
+      count: 64,
+      barColor: charts.ColorUtil.fromDartColor(Colors.red),
+    )
+  ];
+
   List<User> user = new List();
   List<User> user2 = new List();
 
@@ -81,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Choice _selectedChoice = choices[0];
   LoginUser loginUser;
   _MyHomePageState(this.loginUser);
+  // ignore: unused_field
   GoogleSignInAccount _currentUser;
 
   void _select(Choice choice) {
@@ -200,8 +253,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Future<Null> getUsers() async {
-
-
     var envelope2 =
         "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" "
         "xmlns:urn=\"urn:sap-com:document:sap:rfc:functions\"><soapenv:Header/><soapenv:Body>"
@@ -249,31 +300,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget firstPage() {
-    return 
-    SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        // Chart title
-        title: ChartTitle(text: 'Aylık belge sayısı'),
-        // Enable legend
-        legend: Legend(isVisible: true),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: <ChartSeries<SalesData, String>>[
-          LineSeries<SalesData, String>(
-              dataSource: <SalesData>[
-                SalesData('Jan', 35),
-                SalesData('Feb', 28),
-                SalesData('Mar', 34),
-                SalesData('Apr', 32),
-                SalesData('May', 40),
-                SalesData('Haz', 30)
-              ],
-              xValueMapper: (SalesData sales, _) => sales.year,
-              yValueMapper: (SalesData sales, _) => sales.sales,
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: true))
-        ])
-        ;
+    return RefreshIndicator(
+        key: refreshKey,
+        child: Container(
+          color: backGrountGrey,
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  SubscriberChart(
+                    data: data,
+                    tablo: "Son 5 Aylık Belge Sayısı",
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+        onRefresh: refreshList);
+    // child:
   }
 
   Widget secondPageList() {
@@ -703,9 +748,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   ),
                   title: new Text("Paslama"),
                   onTap: () {
-                      user2.clear();
+                    user2.clear();
                     for (var i = 0; i < user.length; i++) {
-                        if (user[i].userID != loginUser.userName) {
+                      if (user[i].userID != loginUser.userName) {
                         user2.add(user[i]);
                       }
                     }
@@ -781,8 +826,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       },
     );
   }
-
-  Widget dashboard() {}
 
   paslaOnayRed(Records record, String durum) {
     wsPaslaSonuc(record.userName, record.itemID, record.recordID,
@@ -940,14 +983,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 }
 
+/// Sample linear data type.
+class LinearSales {
+  final int year;
+  final int sales;
+
+  LinearSales(this.year, this.sales);
+}
+
 const List<Choice> choices = const <Choice>[
   const Choice(id: 'noti', title: 'Bildirimler', icon: Icons.notifications),
   const Choice(id: 'exit', title: 'Çıkış yap', icon: Icons.notifications)
 ];
-
-class SalesData {
-  SalesData(this.year, this.sales);
-
-  final String year;
-  final double sales;
-}
