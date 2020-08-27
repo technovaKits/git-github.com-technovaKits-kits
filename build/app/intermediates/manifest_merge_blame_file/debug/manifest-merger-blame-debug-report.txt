@@ -12,14 +12,14 @@
 12         to allow setting breakpoints, to provide hot reload, etc.
 13    -->
 14    <uses-permission android:name="android.permission.INTERNET" />
-14-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:8:5-67
-14-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:8:22-64
+14-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:8:5-67
+14-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:8:22-64
 15    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-15-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:9:5-79
-15-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:9:22-76
+15-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:9:5-79
+15-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:9:22-76
 16    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-16-->[:connectivity] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-76
-16-->[:connectivity] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:8:22-73
+16-->[:connectivity] D:\kits27_08\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-76
+16-->[:connectivity] D:\kits27_08\git-github.com-technovaKits-kits\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:8:22-73
 17    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
 17-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:24:5-68
 17-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:24:22-65
@@ -28,49 +28,49 @@
 18-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:26:22-79
 19
 20    <application
-20-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:5-26:19
+20-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:5-26:19
 21        android:name="io.flutter.app.FlutterApplication"
-21-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:18-66
+21-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:18-66
 22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 22-->[androidx.core:core:1.1.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\b011d4b5d2ec7eea4ff52e346e1e6e65\core-1.1.0\AndroidManifest.xml:24:18-86
 23        android:debuggable="true"
 24        android:icon="@mipmap/ic_launcher"
-24-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:88-122
+24-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:88-122
 25        android:label="kits" >
-25-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:67-87
+25-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:10:67-87
 26        <activity
-26-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:9-22:20
+26-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:9-22:20
 27            android:name="com.technova.kits.MainActivity"
-27-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:19-47
+27-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:19-47
 28            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-28-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:114-264
+28-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:114-264
 29            android:hardwareAccelerated="true"
-29-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:265-299
+29-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:265-299
 30            android:launchMode="singleTop"
-30-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:48-78
+30-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:48-78
 31            android:theme="@style/LaunchTheme"
-31-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:79-113
+31-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:79-113
 32            android:windowSoftInputMode="adjustResize" >
-32-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:300-342
+32-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:12:300-342
 33            <intent-filter>
-33-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:14:13-17:29
+33-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:14:13-17:29
 34                <action android:name="android.intent.action.MAIN" />
-34-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:15:17-68
-34-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:15:25-66
+34-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:15:17-68
+34-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:15:25-66
 35
 36                <category android:name="android.intent.category.LAUNCHER" />
-36-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:16:17-76
-36-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:16:27-74
+36-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:16:17-76
+36-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:16:27-74
 37            </intent-filter>
 38            <intent-filter>
-38-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:18:13-21:29
+38-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:18:13-21:29
 39                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-39-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:19:17-69
-39-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:19:25-66
+39-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:19:17-69
+39-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:19:25-66
 40
 41                <category android:name="android.intent.category.DEFAULT" />
-41-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:20:17-76
-41-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:20:27-73
+41-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:20:17-76
+41-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:20:27-73
 42            </intent-filter>
 43        </activity>
 44        <!--
@@ -78,38 +78,38 @@
 46             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
 47        -->
 48        <meta-data
-48-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:25:9-72
+48-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:25:9-72
 49            android:name="flutterEmbedding"
-49-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:25:20-51
+49-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:25:20-51
 50            android:value="2" />
-50-->C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:25:52-69
+50-->D:\kits27_08\git-github.com-technovaKits-kits\android\app\src\main\AndroidManifest.xml:25:52-69
 51
 52        <service
-52-->[:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+52-->[:firebase_auth] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
 53            android:name="com.google.firebase.components.ComponentDiscoveryService"
-53-->[:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
+53-->[:firebase_auth] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
 54            android:directBootAware="true"
 54-->[com.google.firebase:firebase-common:19.3.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ea418f41a9d3ee5f494ee029b1e4df79\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
 55            android:exported="false" >
 55-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:35:13-37
 56            <meta-data
-56-->[:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+56-->[:firebase_auth] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 57                android:name="com.google.firebase.components:io.flutter.plugins.firebaseauth.FlutterFirebaseAppRegistrar"
-57-->[:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-122
+57-->[:firebase_auth] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-122
 58                android:value="com.google.firebase.components.ComponentRegistrar" />
-58-->[:firebase_auth] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+58-->[:firebase_auth] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 59            <meta-data
-59-->[:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+59-->[:firebase_core] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 60                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseAppRegistrar"
-60-->[:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-123
+60-->[:firebase_core] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-123
 61                android:value="com.google.firebase.components.ComponentRegistrar" />
-61-->[:firebase_core] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+61-->[:firebase_core] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 62            <meta-data
-62-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:14:13-16:85
+62-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:14:13-16:85
 63                android:name="com.google.firebase.components:io.flutter.plugins.firebasemessaging.FlutterFirebaseAppRegistrar"
-63-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:15:17-127
+63-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:15:17-127
 64                android:value="com.google.firebase.components.ComponentRegistrar" />
-64-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:16:17-82
+64-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:16:17-82
 65            <meta-data
 65-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\ae936e42205d23ddab410b388bea9015\firebase-auth-19.2.0\AndroidManifest.xml:36:13-38:85
 66                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
@@ -124,13 +124,13 @@
 70-->[com.google.firebase:firebase-iid:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\a042f32daf9a8d1dd424e6cf0a6f038f\firebase-iid-20.0.1\AndroidManifest.xml:34:17-82
 71        </service>
 72        <service android:name="io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService" >
-72-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
-72-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-101
+72-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+72-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-101
 73            <intent-filter>
-73-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:29
+73-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:29
 74                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-74-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-78
-74-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:25-75
+74-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-78
+74-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:25-75
 75            </intent-filter>
 76        </service>
 77
@@ -181,10 +181,10 @@
 104            android:exported="false" >
 104-->[com.google.firebase:firebase-messaging:20.0.1] C:\Users\technova\.gradle\caches\transforms-2\files-2.1\06a2b3a8788c2c320c2d9d340598b30f\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:30:13-37
 105            <intent-filter android:priority="-500" >
-105-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:29
+105-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:29
 106                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-106-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-78
-106-->[:firebase_messaging] C:\Users\technova\Desktop\flutter project\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:25-75
+106-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-78
+106-->[:firebase_messaging] D:\kits27_08\git-github.com-technovaKits-kits\build\firebase_messaging\intermediates\library_manifest\debug\AndroidManifest.xml:10:25-75
 107            </intent-filter>
 108        </service>
 109
