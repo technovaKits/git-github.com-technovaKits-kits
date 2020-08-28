@@ -1,4 +1,4 @@
-#Thu Aug 27 16:10:15 EET 2020
+#Fri Aug 28 10:44:47 EET 2020
 base.0=D\:\\kits27_08\\git-github.com-technovaKits-kits\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
